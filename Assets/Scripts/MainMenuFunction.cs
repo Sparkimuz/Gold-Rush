@@ -21,4 +21,17 @@ public class MainMenuFunction : MonoBehaviour
         SceneManager.LoadScene(1);
 
     }
+
+    public void Restart()
+    {
+        // Ricarica la scena attuale
+        SceneManager.LoadScene(1/*SceneManager.GetActiveScene().buildIndex*/);
+    }
+
+    // Questa funzione verrà chiamata quando il pulsante di menu viene cliccato
+    public void GoToMenu()
+    {
+        // Ricarica la scena del menu principale (assicurati che sia nella posizione corretta nell'index)
+        SceneManager.LoadScene(0); // Sostituisci 0 con l'index della tua scena principale se necessario
+    }
 }

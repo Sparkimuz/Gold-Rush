@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: New Table Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: New Table
+  m_TableCollectionNameGuidString: 8f1917f3058d38a4b95773b64fc7b661
+  m_Entries:
+  - m_Id: 2489212440576
+    m_Key: VIA!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2718137552896
+    m_Key: GIOCA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4130145800192
+    m_Key: NEGOZIO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4485885693952
+    m_Key: ESCI DAL GIOCO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9550323224576
+    m_Key: CONTINUA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12344719544320
+    m_Key: RIPARTI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12433806561280
+    m_Key: MENU
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40919766110208
+    m_Key: IMPOSTAZIONI
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 5179873211111440408
+  references:
+    version: 2
+    RefIds:
+    - rid: 5179873211111440408
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1728667949502
