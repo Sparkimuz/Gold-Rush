@@ -1,64 +1,65 @@
 using UnityEngine;
-using UnityEngine.Localization.Settings;
-using UnityEngine.UI;
 
 public class SettingsManager : MonoBehaviour
 {
     public GameObject settingsPanel;  // Il pannello delle impostazioni
-    public Slider volumeSlider;       // Slider per il volume (se decidi di aggiungerlo)
-    public AudioSource gameAudioSource; // L'audio del gioco
-    private bool isPaused = false;    // Stato del gioco, per sapere se è in pausa o meno
+    private bool isSettingsOpen = false; // Controlla se la schermata delle impostazioni è aperta
 
+    // Metodo di inizializzazione
     void Start()
     {
-        // Assicurati che il pannello delle impostazioni sia inizialmente nascosto
-        settingsPanel.SetActive(false);
+        // All'avvio, disattiva il pannello delle impostazioni
+        if (settingsPanel != null)
+        {
+            settingsPanel.SetActive(false);
+        }
     }
 
-    // Metodo per aprire il pannello delle impostazioni e mettere il gioco in pausa
-public void OpenSettings()
-{
-    if (isPaused) return;  // Evita di riaprire il pannello se il gioco è già in pausa
-
-    settingsPanel.SetActive(true);
-    Time.timeScale = 0f;
-    isPaused = true;
-}
-
-public void CloseSettings()
-{
-    if (!isPaused) return;  // Evita di chiudere le impostazioni se il gioco non è in pausa
-
-    settingsPanel.SetActive(false);
-    Time.timeScale = 1f;
-    isPaused = false;
-}
-
-    // Metodo per cambiare la lingua (usato dalle bandiere)
-    public void ChangeLanguage(int languageIndex)
+    // Metodo per aprire/chiudere le impostazioni
+    public void ToggleSettings()
     {
-        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[languageIndex];
-        Debug.Log("Lingua cambiata a: " + LocalizationSettings.SelectedLocale.LocaleName);
+        if (isSettingsOpen)
+        {
+            // Se le impostazioni sono aperte, chiudi le impostazioni e riprendi il gioco
+            CloseSettings();
+        }
+        else
+        {
+            // Se le impostazioni sono chiuse, aprile
+            OpenSettings();
+        }
     }
 
-    // Metodo per modificare il volume tramite uno slider (opzionale)
-    public void AdjustVolume(float volume)
+    private void OpenSettings()
     {
-        gameAudioSource.volume = volume;
-        Debug.Log("Volume regolato a: " + volume);
+        settingsPanel.SetActive(true);   // Mostra il pannello delle impostazioni
+        isSettingsOpen = true;
+        PauseGame(); // Mette in pausa il gioco
     }
 
-    // Metodo per mutare/smutare il volume (alternativa allo slider)
-    public void ToggleMute()
+    private void CloseSettings()
     {
-        gameAudioSource.mute = !gameAudioSource.mute;
-        Debug.Log("Audio muto: " + gameAudioSource.mute);
+        settingsPanel.SetActive(false);   // Nascondi il pannello delle impostazioni
+        isSettingsOpen = false;
+        ResumeGame(); // Riprende il gioco
     }
 
-    // Metodo per il pulsante "Riprendi", che chiude le impostazioni e continua il gioco
+    // Metodo per mettere in pausa il gioco
+    private void PauseGame()
+    {
+        Time.timeScale = 0f; // Ferma il tempo di gioco
+    }
+
+    // Metodo per riprendere il gioco
     public void ResumeGame()
     {
-        CloseSettings();  // Chiude il pannello e riprende il gioco
-        Debug.Log("Gioco ripreso dal pulsante 'Riprendi'.");
+        Time.timeScale = 1f; // Riprendi il tempo di gioco
+    }
+
+    // Metodo per il pulsante "Continua"
+    public void OnContinueButtonClicked()
+    {
+        // Chiude il pannello delle impostazioni e riprende il gioco
+        CloseSettings();
     }
 }
