@@ -20,6 +20,7 @@ public class MovimentoGiocatore : MonoBehaviour
     private Vector2 startTouchPosition;
     private Vector2 endTouchPosition;
     private float swipeThreshold = 50f; // Distanza minima dello swipe per essere considerato valido
+    public static float currentSpeed;
 
     void Start()
     {
@@ -35,7 +36,7 @@ public class MovimentoGiocatore : MonoBehaviour
             distanceCovered += Time.deltaTime * initialSpeed;
 
             // Calcola la velocità logaritmica
-            float currentSpeed = initialSpeed + Mathf.Log(1 + distanceCovered) * growthRate;
+            currentSpeed = initialSpeed + Mathf.Log(1 + distanceCovered) * growthRate;
 
             // Movimento in avanti con la velocità logaritmica
             transform.Translate(Vector3.forward * Time.deltaTime * currentSpeed, Space.World);
