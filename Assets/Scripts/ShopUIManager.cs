@@ -1,16 +1,18 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
+using UnityEngine.UI; // Assicurati di avere TMP per il testo
 
 public class ShopUIManager : MonoBehaviour
 {
     public CharacterManager characterManager;
     public TMP_Text characterNameText;
-    public Image characterImage;
     public TMP_Text characterCostText;
     public Button purchaseButton;
     public TMP_Text purchaseButtonText;
     public GameObject shopPanel;
+
+    public Transform characterDisplayPoint; // Punto dove visualizzare i modelli 3D
+    private GameObject currentCharacterModel; // Riferimento al modello attualmente mostrato
 
     private int currentCharacterIndex = 0;
 
@@ -35,10 +37,18 @@ public class ShopUIManager : MonoBehaviour
     {
         var character = characterManager.characters[currentCharacterIndex];
         characterNameText.text = character.characterName;
-        characterImage.sprite = character.characterSprite;
         characterCostText.text = character.isPurchased ? "Acquistato" : character.cost.ToString();
-
         purchaseButtonText.text = character.isPurchased ? "Seleziona" : "Acquista";
+
+        // Rimuovi il modello attuale, se esistente
+        if (currentCharacterModel != null)
+        {
+            Destroy(currentCharacterModel);
+        }
+
+        // Carica il modello 3D del personaggio corrente
+        currentCharacterModel = Instantiate(character.characterPrefab, characterDisplayPoint.position, Quaternion.identity);
+        currentCharacterModel.transform.SetParent(characterDisplayPoint);
     }
 
     public void OnPurchaseButtonClicked()

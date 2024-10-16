@@ -1,76 +1,55 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
+
+[System.Serializable]
+public class Character
+{
+    public string characterName;
+    public GameObject characterPrefab; // Prefab 3D del personaggio
+    public int cost;
+    public bool isPurchased;
+}
 
 public class CharacterManager : MonoBehaviour
 {
-    [System.Serializable]
-    public class Character
-    {
-        public string characterName;
-        public int cost;
-        public Sprite characterSprite;
-        public bool isPurchased;
-    }
+    public List<Character> characters;
+    public Transform characterDisplayPoint; // Punto in cui mostrare i modelli 3D
+    private GameObject currentCharacterInstance;
 
-    public List<Character> characters = new List<Character>(); // Lista di personaggi disponibili
-    public int playerCoins = 10000; // Monete del giocatore (puoi caricarle da un sistema di salvataggio)
-
-    private int selectedCharacterIndex = 0; // Indice del personaggio selezionato
+    private int selectedCharacterIndex = 0;
 
     void Start()
     {
-        LoadPlayerData();
+        DisplayCharacter(selectedCharacterIndex);
     }
 
-    public void SelectCharacter(int index)
+    public void DisplayCharacter(int characterIndex)
     {
-        if (characters[index].isPurchased)
+        // Rimuovi il personaggio attualmente visualizzato
+        if (currentCharacterInstance != null)
         {
-            selectedCharacterIndex = index;
-            Debug.Log("Personaggio selezionato: " + characters[index].characterName);
-            SavePlayerData();
+            Destroy(currentCharacterInstance);
         }
-        else
-        {
-            Debug.Log("Personaggio non acquistato. Acquistalo prima di selezionarlo.");
-        }
+
+        // Crea una nuova istanza del personaggio selezionato
+        Character character = characters[characterIndex];
+        currentCharacterInstance = Instantiate(character.characterPrefab, characterDisplayPoint.position, characterDisplayPoint.rotation);
+        currentCharacterInstance.transform.SetParent(characterDisplayPoint, false);
     }
 
-    public void PurchaseCharacter(int index)
+    public void SelectCharacter(int characterIndex)
     {
-        if (!characters[index].isPurchased && playerCoins >= characters[index].cost)
-        {
-            playerCoins -= characters[index].cost;
-            characters[index].isPurchased = true;
-            Debug.Log("Personaggio acquistato: " + characters[index].characterName);
-            SavePlayerData();
-        }
-        else if (characters[index].isPurchased)
-        {
-            Debug.Log("Personaggio già acquistato.");
-        }
-        else
-        {
-            Debug.Log("Monete insufficienti.");
-        }
+        selectedCharacterIndex = characterIndex;
+        // Aggiorna la visualizzazione del personaggio
+        DisplayCharacter(selectedCharacterIndex);
     }
 
-    private void LoadPlayerData()
+    public void PurchaseCharacter(int characterIndex)
     {
-        // Aggiungi il caricamento dei dati del giocatore (ad esempio PlayerPrefs)
-        // playerCoins = PlayerPrefs.GetInt("PlayerCoins", 10000);
-        // selectedCharacterIndex = PlayerPrefs.GetInt("SelectedCharacterIndex", 0);
-    }
-
-    private void SavePlayerData()
-    {
-        // Aggiungi il salvataggio dei dati del giocatore (ad esempio PlayerPrefs)
-        // PlayerPrefs.SetInt("PlayerCoins", playerCoins);
-        // PlayerPrefs.SetInt("SelectedCharacterIndex", selectedCharacterIndex);
-    }
-
-    public Character GetSelectedCharacter()
-    {
-        return characters[selectedCharacterIndex];
+        if (!characters[characterIndex].isPurchased)
+        {
+            characters[characterIndex].isPurchased = true;
+            Debug.Log(characters[characterIndex].characterName + " è stato acquistato!");
+        }
     }
 }
