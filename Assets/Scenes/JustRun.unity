@@ -13575,8 +13575,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 1299239746}
-  volumeSlider: {fileID: 1517762252}
-  audioMixer: {fileID: 24100000, guid: 386c542da9884364ea21a015a410703c, type: 2}
 --- !u!1 &407320804
 GameObject:
   m_ObjectHideFlags: 0
@@ -14600,7 +14598,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 405074591}
         m_TargetAssemblyTypeName: SettingsManager, Assembly-CSharp
-        m_MethodName: ResumeGame
+        m_MethodName: OnContinueButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
