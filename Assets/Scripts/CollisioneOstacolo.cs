@@ -13,16 +13,19 @@ public class CollisioneOstacolo : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        this.gameObject.GetComponent<BoxCollider>().enabled = false;
-        thePlayer.GetComponent<MovimentoGiocatore>().enabled = false;
-        charModel.GetComponent<Animator>().Play("Stumble Backwards");
-        lostGame = true; // Imposta lostGame a true
-        Debug.Log("lostGame impostato a true."); // Log di debug
-        levelControl.GetComponent<LevelDistance>().enabled = false;
-        thudSound.Play();
-        //Codice qui sotto da modificare se voglio fare il menù con la telecamera che si muove
-        mainCam.GetComponent<Animator>().enabled = true;
-        levelControl.GetComponent<EndRunSequence>().enabled = true;
+        if (MovimentoGiocatore.canMove)
+        {
+            this.gameObject.GetComponent<BoxCollider>().enabled = false;
+            thePlayer.GetComponent<MovimentoGiocatore>().enabled = false;
+            charModel.GetComponent<Animator>().Play("Stumble Backwards");
+            lostGame = true; // Imposta lostGame a true
+            Debug.Log("lostGame impostato a true."); // Log di debug
+            levelControl.GetComponent<LevelDistance>().enabled = false;
+            thudSound.Play();
+            //Codice qui sotto da modificare se voglio fare il menù con la telecamera che si muove
+            mainCam.GetComponent<Animator>().enabled = true;
+            levelControl.GetComponent<EndRunSequence>().enabled = true;
+        }
     }
 
 }

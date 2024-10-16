@@ -42,8 +42,8 @@ public class GeneratoreSegmento : MonoBehaviour
 
     private List<GameObject[]> biomiSegments = new List<GameObject[]>();
 
-    [SerializeField] int zPos = 50;
-    [SerializeField] int zIncrement = 50;
+    [SerializeField] int zPos = 100;
+    [SerializeField] int zIncrement = 100;
     [SerializeField] bool creatingSegment = false;
 
     private int biomaCount = 0;
