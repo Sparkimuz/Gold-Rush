@@ -1,3 +1,34 @@
+/*using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GeneratoreSegmento : MonoBehaviour
+{
+    public GameObject[] segment;
+
+    [SerializeField] int zPos = 50;
+    [SerializeField] int zIncrement = 50;
+    [SerializeField] bool creatingSegment = false;
+    [SerializeField] int segmentNum;
+    // Start is called before the first frame update
+    void Update()
+    {
+        if(creatingSegment==false){
+            creatingSegment = true;
+            StartCoroutine(SegmentGen());
+        }
+        
+    }
+
+    IEnumerator SegmentGen(){
+        segmentNum = Random.Range(0, segment.Length);
+        Instantiate(segment[segmentNum], new Vector3(0, 0, zPos), Quaternion.identity);
+        zPos += zIncrement;
+        yield return new WaitForSeconds(3);
+        creatingSegment = false;
+    }
+}
+*/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,19 +42,17 @@ public class GeneratoreSegmento : MonoBehaviour
 
     private List<GameObject[]> biomiSegments = new List<GameObject[]>();
 
-    [SerializeField] int zPos = 200;
+    [SerializeField] int zPos = 100;
     [SerializeField] int zIncrement = 100;
     [SerializeField] bool creatingSegment = false;
 
     private int biomaCount = 0;
-    public int biomaDuration = 8;
+    public int biomaDuration = 5;
     private int biomaIndex = 0;
 
     public int maxSegments = 20; // Massimo numero di segmenti da mantenere
 
     private List<GameObject> segments = new List<GameObject>(); // Lista per tenere traccia dei segmenti creati
-
-    private MovimentoGiocatore movimentoGiocatore; // Riferimento allo script di movimento del giocatore
 
     void Start()
     {
@@ -32,14 +61,11 @@ public class GeneratoreSegmento : MonoBehaviour
         biomiSegments.Add(bioma2Segments);
         biomiSegments.Add(bioma3Segments);
         biomiSegments.Add(bioma4Segments);
-
-        // Trova il riferimento allo script MovimentoGiocatore
-        movimentoGiocatore = FindObjectOfType<MovimentoGiocatore>();
     }
 
     void Update()
     {
-        if (!creatingSegment)
+        if (creatingSegment == false)
         {
             creatingSegment = true;
             StartCoroutine(SegmentGen());
@@ -81,12 +107,7 @@ public class GeneratoreSegmento : MonoBehaviour
             biomaIndex = (biomaIndex + 1) % biomiSegments.Count; // Passa al bioma successivo
         }
 
-        // Calcola l'intervallo per la generazione del segmento in base alla velocità del giocatore
-        float playerSpeed = movimentoGiocatore != null ? movimentoGiocatore.playerSpeed : 10f; // Default a 10 se movimentoGiocatore è nullo
-        float segmentGenerationInterval = Mathf.Clamp(zIncrement / playerSpeed, 0.1f, 3f);
-
-        // Aspetta per un periodo di tempo calcolato dinamicamente prima di creare il prossimo segmento
-        yield return new WaitForSeconds(segmentGenerationInterval);
+        yield return new WaitForSeconds(3);
         creatingSegment = false;
     }
 }
