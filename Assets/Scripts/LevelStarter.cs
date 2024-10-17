@@ -13,7 +13,8 @@ public class LevelStarter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MovimentoGiocatore.canMove = false;
+        //MovimentoGiocatore.canMove = false;
+        MovimentoGiocatore.canMove = true;
         StartCoroutine(CountSequence());
     }
 

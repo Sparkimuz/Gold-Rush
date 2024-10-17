@@ -6841,7 +6841,7 @@ MonoBehaviour:
   disDisplayEnd: {fileID: 1159283042}
   disRun: 0
   addingDis: 0
-  disDelay: 0.35
+  disUpdateInterval: 0.1
 --- !u!114 &178147904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13508,8 +13508,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 1299239746}
-  volumeSlider: {fileID: 0}
-  gameAudioSource: {fileID: 0}
 --- !u!1 &407320804
 GameObject:
   m_ObjectHideFlags: 0
@@ -26361,7 +26359,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcc1c0bf4dfad6440a46de8f5e19a195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 20
+  initialSpeed: 10
+  growthRate: 3
   horizontalSpeed: 50
   rightLimit: 10
   leftLimit: -10
@@ -26369,6 +26368,7 @@ MonoBehaviour:
   jumpHeight: 3
   timeInAir: 0.6
   playerObject: {fileID: 359067488}
+  playerSpeed: 20
 --- !u!1001 &840645723
 PrefabInstance:
   m_ObjectHideFlags: 0
