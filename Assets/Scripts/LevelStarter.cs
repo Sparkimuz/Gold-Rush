@@ -13,12 +13,13 @@ public class LevelStarter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MovimentoGiocatore.canMove = false;
+        //MovimentoGiocatore.canMove = false;
         StartCoroutine(CountSequence());
     }
 
     IEnumerator CountSequence(){
         //yield return new WaitForSeconds(1.5f);
+        MovimentoGiocatore.canMove = true;
         countDown3.SetActive(true);
         readyFX.Play();
         yield return new WaitForSeconds(1);
@@ -30,6 +31,6 @@ public class LevelStarter : MonoBehaviour
         yield return new WaitForSeconds(1);
         countDownGo.SetActive(true);
         goFX.Play();
-        MovimentoGiocatore.canMove = true;
+        
     }
 }
