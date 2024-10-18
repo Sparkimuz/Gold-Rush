@@ -83,12 +83,6 @@ public class FirebaseController : MonoBehaviour
         signupPanel.SetActive(true);
     }
 
-
-
-
-
-
-
     public void loginUser()
     {
         if (string.IsNullOrEmpty(loginEmail.text))
@@ -143,6 +137,8 @@ public class FirebaseController : MonoBehaviour
             showNotificationMessage("Error", "Forget Email Empty");
             return;
         }
+
+        forgetPasswordSubmit(forgetPassEmail.text);
     }
 
 
@@ -185,6 +181,17 @@ public class FirebaseController : MonoBehaviour
             if (task.IsFaulted)
             {
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+
+                foreach (Exception exception in task.Exception.Flatten().InnerExceptions)
+                {
+                    Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
+                    if (firebaseEx != null)
+                    {
+                        var errorCode = (AuthError)firebaseEx.ErrorCode;
+                        showNotificationMessage("Error", GetErrorMessage(errorCode));
+                    }
+                }
+
                 return;
             }
 
@@ -209,6 +216,15 @@ public class FirebaseController : MonoBehaviour
             if (task.IsFaulted)
             {
                 Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+
+                foreach (Exception exception in task.Exception.Flatten().InnerExceptions) {
+                    Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
+                    if (firebaseEx != null)
+                    {
+                        var errorCode = (AuthError)firebaseEx.ErrorCode;
+                        showNotificationMessage("Error", GetErrorMessage(errorCode));
+                    }
+                }
                 return;
             }
 
@@ -222,6 +238,40 @@ public class FirebaseController : MonoBehaviour
             
         });
 
+    }
+
+
+    private static string GetErrorMessage(AuthError errorCode)
+    {
+        var message = "";
+        switch (errorCode)
+        {
+            case AuthError.AccountExistsWithDifferentCredentials:
+                message = "Account not exist";
+                break;
+            case AuthError.MissingPassword:
+                message = "Missing password";
+                break;
+            case AuthError.WeakPassword:
+                message = "Password too weak";
+                break;
+            case AuthError.WrongPassword:
+                message = "Wrong Password";
+                break;
+            case AuthError.EmailAlreadyInUse:
+                message = "Your Email is already in use";
+                break;
+            case AuthError.InvalidEmail:
+                message = "Your email is invalid";
+                break;
+            case AuthError.MissingEmail:
+                message = "Email missing";
+                break;
+            default:
+                message = "Invalid error";
+                break;
+        }
+        return message;
     }
 
 
@@ -289,6 +339,37 @@ public class FirebaseController : MonoBehaviour
         }
     }
 
+    void forgetPasswordSubmit(string forgetPasswordEmail)
+    {
+        auth.SendPasswordResetEmailAsync(forgetPasswordEmail).ContinueWithOnMainThread(task =>
+        {
+
+            if (task.IsCanceled)
+            {
+                Debug.LogError("SendPasswordResetEmailAsync was canceled");
+            }
+
+            if (task.IsFaulted)
+            {
+                Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+
+                foreach (Exception exception in task.Exception.Flatten().InnerExceptions)
+                {
+                    Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
+                    if (firebaseEx != null)
+                    {
+                        var errorCode = (AuthError)firebaseEx.ErrorCode;
+                        showNotificationMessage("Error", GetErrorMessage(errorCode));
+                    }
+                }
+            }
+
+            showNotificationMessage("Alert", "Succesfully send Email for reset Password!");
+        });
+    }
+
+
+ 
 
     void Update()
     {
