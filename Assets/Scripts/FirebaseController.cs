@@ -60,9 +60,14 @@ public class FirebaseController : MonoBehaviour
 
     public void loginUser()
     {
-        if (string.IsNullOrEmpty(loginEmail.text) && string.IsNullOrEmpty(loginPassword.text))
+        if (string.IsNullOrEmpty(loginEmail.text))
         {
-            showNotificationMessage("Error", "Fields empty!, please input details in all fields");
+            showNotificationMessage("Email Error", "Please enter an Email!");
+            return;
+        }
+        else if (string.IsNullOrEmpty(loginPassword.text))
+        {
+            showNotificationMessage("Password Error", "Please enter a password!");
             return;
         }
 
@@ -71,10 +76,24 @@ public class FirebaseController : MonoBehaviour
 
     public void signupUser()
     {
-        if (string.IsNullOrEmpty(signupEmail.text) && string.IsNullOrEmpty(signupPassword.text) &&
-            string.IsNullOrEmpty(signupConfirmPassword.text) && string.IsNullOrEmpty(signupUsername.text))
+        if (string.IsNullOrEmpty(signupUsername.text))
         {
-            showNotificationMessage("Error", "Fields empty!, please input details in all fields");
+            showNotificationMessage("Username Error", "Please enter an Username!");
+            return;
+        }
+        else if (string.IsNullOrEmpty(signupEmail.text))
+        {
+            showNotificationMessage("Email Error", "Please enter an Email!");
+            return;
+        }
+        if (string.IsNullOrEmpty(signupPassword.text))
+        {
+            showNotificationMessage("Password Error", "Please enter a Password!");
+            return;
+        }
+        if (string.IsNullOrEmpty(signupConfirmPassword.text))
+        {
+            showNotificationMessage("Password Error", "Please confirm the Password");
             return;
         }
 
