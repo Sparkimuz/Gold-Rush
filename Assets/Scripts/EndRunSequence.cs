@@ -22,6 +22,14 @@ public class EndRunSequence : MonoBehaviour
 
     IEnumerator EndSequence()
     {
+        // Aggiungi le monete raccolte durante la run al totale
+        if (MasterInfo.coinCount > 0)
+        {
+            CoinManager.AddCoins(MasterInfo.coinCount);
+        }
+
+        // Reset delle monete raccolte per la prossima run
+
         yield return new WaitForSeconds(1); // Aspetta prima di mostrare la schermata finale
         liveCoins.SetActive(false);
         liveDis.SetActive(false);
