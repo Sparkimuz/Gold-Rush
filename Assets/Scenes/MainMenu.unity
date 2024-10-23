@@ -546,7 +546,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &47975130
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8230,7 +8230,6 @@ MonoBehaviour:
   characterManager: {fileID: 1602761629}
   characterNameText: {fileID: 829879379}
   characterCostText: {fileID: 1424122799}
-  totalCoinsText: {fileID: 0}
   purchaseButton: {fileID: 1954274519}
   purchaseButtonText: {fileID: 578752566}
   shopPanel: {fileID: 47975129}
@@ -9742,6 +9741,7 @@ MonoBehaviour:
     characterPrefab: {fileID: 1567809593}
     cost: 500
     isPurchased: 0
+  characterDisplayPoint: {fileID: 0}
 --- !u!1001 &1614958832
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11552,7 +11552,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45b3355dbbe69c941b07ff5cd9a0ba9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shopPanel: {fileID: 47975129}
 --- !u!4 &1908230881
 Transform:
   m_ObjectHideFlags: 0

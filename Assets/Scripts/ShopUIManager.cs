@@ -75,7 +75,7 @@ public class ShopUIManager : MonoBehaviour
     private void UpdateTotalCoinsUI()
     {
         // Aggiorna il testo delle monete totali
-        totalCoinsText.text = "Monete: " + CoinManager.GetTotalCoins().ToString();
+        //totalCoinsText.text = "Monete: " + CoinManager.GetTotalCoins().ToString();
     }
 
     public void OnBackButtonClicked()
