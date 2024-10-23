@@ -5,33 +5,54 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuFunction : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public GameObject shopPanel; // Riferimento al pannello dello shop
+
     void Start()
     {
-        
+        // Assicurati che il pannello dello shop sia disattivato all'inizio
+        if (shopPanel != null)
+        {
+            shopPanel.SetActive(false);
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        // Eventuali aggiornamenti o logiche aggiuntive
     }
 
-    public void PlayGame(){
+    public void PlayGame()
+    {
         SceneManager.LoadScene(1);
-
     }
 
     public void Restart()
     {
         // Ricarica la scena attuale
-        SceneManager.LoadScene(1/*SceneManager.GetActiveScene().buildIndex*/);
+        SceneManager.LoadScene(1 /*SceneManager.GetActiveScene().buildIndex*/);
     }
 
-    // Questa funzione verrà chiamata quando il pulsante di menu viene cliccato
     public void GoToMenu()
     {
         // Ricarica la scena del menu principale (assicurati che sia nella posizione corretta nell'index)
         SceneManager.LoadScene(0); // Sostituisci 0 con l'index della tua scena principale se necessario
+    }
+
+    // Metodo per aprire il pannello dello shop
+    public void OpenShop()
+    {
+        if (shopPanel != null)
+        {
+            shopPanel.SetActive(true);
+        }
+    }
+
+    // Metodo per chiudere il pannello dello shop
+    public void CloseShop()
+    {
+        if (shopPanel != null)
+        {
+            shopPanel.SetActive(false);
+        }
     }
 }
