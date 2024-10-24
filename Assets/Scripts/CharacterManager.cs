@@ -16,12 +16,12 @@ public class CharacterManager : MonoBehaviour
     private int selectedCharacterIndex = 0;
 
     // Metodo per acquistare un personaggio
-    public void PurchaseCharacter(int characterIndex)
+    public void PurchaseCharacter(int index)
     {
-        if (!characters[characterIndex].isPurchased)
+        if (characters[index].cost <= CoinManager.GetTotalCoins()) // Supponiamo esista un metodo GetCurrency()
         {
-            characters[characterIndex].isPurchased = true;
-            Debug.Log(characters[characterIndex].characterName + " è stato acquistato!");
+            characters[index].isPurchased = true;
+            CoinManager.SpendCoins(characters[index].cost);
         }
     }
 
