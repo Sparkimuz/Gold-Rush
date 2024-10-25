@@ -50,6 +50,14 @@ MonoBehaviour:
     m_Localized: AJUSTES
     m_Metadata:
       m_Items: []
+  - m_Id: 5085796943134720
+    m_Localized: PERFIL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5093497144213504
+    m_Localized: "VOLVER AL MEN\xDA"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

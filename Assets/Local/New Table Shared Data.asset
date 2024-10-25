@@ -36,7 +36,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12344719544320
-    m_Key: RIPARTI
+    m_Key: RIAVVIA
     m_Metadata:
       m_Items: []
   - m_Id: 12433806561280
@@ -45,6 +45,18 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 40919766110208
     m_Key: IMPOSTAZIONI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5085796943134720
+    m_Key: PROFILO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5093497144213504
+    m_Key: TORNA AL MENU
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5093669647548416
+    m_Key: 
     m_Metadata:
       m_Items: []
   m_Metadata:

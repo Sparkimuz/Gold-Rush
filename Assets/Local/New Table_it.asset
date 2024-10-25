@@ -39,7 +39,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12344719544320
-    m_Localized: RIPARTI
+    m_Localized: RIAVVIA
     m_Metadata:
       m_Items: []
   - m_Id: 12433806561280
@@ -48,6 +48,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 40919766110208
     m_Localized: IMPOSTAZIONI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5085796943134720
+    m_Localized: PROFILO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5093497144213504
+    m_Localized: TORNA AL MENU
     m_Metadata:
       m_Items: []
   references:
