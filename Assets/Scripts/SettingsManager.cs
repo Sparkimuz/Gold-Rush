@@ -30,7 +30,7 @@ public class SettingsManager : MonoBehaviour
         }
     }
 
-    private void OpenSettings()
+    public void OpenSettings()
     {
         settingsPanel.SetActive(true);   // Mostra il pannello delle impostazioni
         isSettingsOpen = true;

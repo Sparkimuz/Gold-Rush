@@ -14,6 +14,9 @@ public class FirebaseController : MonoBehaviour
 
 
 {
+
+    public GameObject mainMenu, settingsMenu;
+
     public GameObject loginPanel, profilePanel, signupPanel, forgetPasswordPanel, notificationPanel;
 
     public TMP_InputField loginEmail, loginPassword, signupEmail, signupPassword, signupConfirmPassword, signupUsername, forgetPassEmail;
@@ -58,7 +61,10 @@ public class FirebaseController : MonoBehaviour
         forgetPasswordPanel.SetActive(true);
     }
 
-
+    public void openMainMenu()
+    {
+        loginPanel.SetActive(false);
+    }
     public void openLoginPanel()
     {
         forgetPasswordPanel.SetActive(false);
@@ -234,7 +240,7 @@ public class FirebaseController : MonoBehaviour
 
             profile_UserName_text.text = result.User.DisplayName;
             profile_UserEmail_text.text = result.User.Email;
-            openProfilePanel();
+            openMainMenu();
             
         });
 
