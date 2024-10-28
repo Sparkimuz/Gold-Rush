@@ -5,15 +5,19 @@ using TMPro;
 using UnityEngine.UI;
 using System.Net.Mail;
 using Firebase;
+using Firebase.Database;
 using Firebase.Auth;
 using Firebase.Extensions;
 using System;
 using System.Threading.Tasks;
 
+
 public class FirebaseController : MonoBehaviour
 
 
 {
+
+
 
     public GameObject mainMenu, settingsMenu;
 
@@ -27,6 +31,7 @@ public class FirebaseController : MonoBehaviour
 
     Firebase.Auth.FirebaseAuth auth;
     Firebase.Auth.FirebaseUser user;
+    private DatabaseReference dbReference;
 
     bool isSignIn = false;
     bool isSigned = false;
@@ -294,8 +299,10 @@ public class FirebaseController : MonoBehaviour
     void InitializeFirebase()
     {
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+        dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         auth.StateChanged += AuthStateChanged;
         AuthStateChanged(this, null);
+
     }
 
     void AuthStateChanged(object sender, System.EventArgs eventArgs)
@@ -384,6 +391,47 @@ public class FirebaseController : MonoBehaviour
         });
     }
 
+
+
+    public void SaveCoins(int coins)
+    {
+        if (user != null)
+        {
+            dbReference.Child("users").Child(user.UserId).Child("totalCoins").SetValueAsync(coins)
+                .ContinueWith(task =>
+                {
+                    if (task.IsCompleted)
+                    {
+                        Debug.Log("Monete salvate con successo!");
+                    }
+                    else
+                    {
+                        Debug.LogError("Errore salvataggio monete: " + task.Exception);
+                    }
+                });
+        }
+    }
+
+    public void LoadCoins()
+    {
+        if (user != null)
+        {
+            dbReference.Child("users").Child(user.UserId).Child("totalCoins").GetValueAsync()
+                .ContinueWith(task =>
+                {
+                    if (task.IsCompleted)
+                    {
+                        DataSnapshot snapshot = task.Result;
+                        int totalCoins = int.Parse(snapshot.Value.ToString());
+                        Debug.Log("Monete totali caricate: " + totalCoins);
+                    }
+                    else
+                    {
+                        Debug.LogError("Errore caricamento monete: " + task.Exception);
+                    }
+                });
+        }
+    }
 
  
 
