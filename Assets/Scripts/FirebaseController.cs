@@ -64,6 +64,8 @@ public class FirebaseController : MonoBehaviour
     public void openMainMenu()
     {
         loginPanel.SetActive(false);
+        profilePanel.SetActive(false);
+        mainMenu.SetActive(true);
     }
     public void openLoginPanel()
     {
@@ -73,12 +75,19 @@ public class FirebaseController : MonoBehaviour
         loginPanel.SetActive(true);
     }
 
+
+
     public void openProfilePanel()
     {
         forgetPasswordPanel.SetActive(false);
         loginPanel.SetActive(false);
         signupPanel.SetActive(false);
         profilePanel.SetActive(true);
+    }
+
+    public void closeProfilePanel()
+    {
+        profilePanel.SetActive(false);
     }
 
     public void openSignupPanel()
@@ -171,6 +180,7 @@ public class FirebaseController : MonoBehaviour
         auth.SignOut();
         profile_UserEmail_text.text = "";
         profile_UserName_text.text = "";
+        settingsMenu.SetActive(false);
         openLoginPanel();
     }
 
