@@ -37,7 +37,7 @@ public class SettingsManager : MonoBehaviour
         PauseGame(); // Mette in pausa il gioco
     }
 
-    private void CloseSettings()
+    public void CloseSettings()
     {
         settingsPanel.SetActive(false);   // Nascondi il pannello delle impostazioni
         isSettingsOpen = false;
