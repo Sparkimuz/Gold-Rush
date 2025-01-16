@@ -18,7 +18,7 @@ public class FirebaseController : MonoBehaviour
 
 {
 
-
+    public static FirebaseController Instance;
 
     public GameObject mainMenu, settingsMenu;
 
@@ -57,6 +57,20 @@ public class FirebaseController : MonoBehaviour
                 // Firebase Unity SDK is not safe to use here.
             }
         });
+    }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void openForgetPasswordPanel()
@@ -120,7 +134,9 @@ public class FirebaseController : MonoBehaviour
         //do login
 
         signInUser(loginEmail.text, loginPassword.text);
-        SceneManager.LoadScene(0);
+        //SceneManager.LoadScene(0);
+        //loginPanel.SetActive(false);
+        //profilePanel.SetActive(true);
     }
 
     public void signupUser()
@@ -189,7 +205,10 @@ public class FirebaseController : MonoBehaviour
         profile_UserName_text.text = "";
         settingsMenu.SetActive(false);
         openLoginPanel();
+
     }
+
+
 
 
     void CreateUser(string email, string password, string userName)
@@ -224,6 +243,8 @@ public class FirebaseController : MonoBehaviour
                 result.User.DisplayName, result.User.UserId);
 
             updateUserProfile(userName);
+            signupPanel.SetActive(false);
+            loginPanel.SetActive(true);
         });
     }
 
@@ -240,11 +261,12 @@ public class FirebaseController : MonoBehaviour
             {
                 Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
 
-                foreach (Exception exception in task.Exception.Flatten().InnerExceptions) {
-                    Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
-                    if (firebaseEx != null)
+                foreach (Exception exception in task.Exception.Flatten().InnerExceptions)
+                {
+                    if (exception is Firebase.FirebaseException firebaseEx)
                     {
                         var errorCode = (AuthError)firebaseEx.ErrorCode;
+                        Debug.LogError("Firebase Error Code: " + errorCode);
                         showNotificationMessage("Error", GetErrorMessage(errorCode));
                     }
                 }
@@ -257,7 +279,7 @@ public class FirebaseController : MonoBehaviour
 
             profile_UserName_text.text = result.User.DisplayName;
             profile_UserEmail_text.text = result.User.Email;
-            
+            SceneManager.LoadScene(0);
         });
 
     }
@@ -327,8 +349,11 @@ public class FirebaseController : MonoBehaviour
 
     void OnDestroy()
     {
-        auth.StateChanged -= AuthStateChanged;
-        auth = null;
+        if (auth != null)
+        {
+            auth.StateChanged -= AuthStateChanged;
+            auth = null;
+        }
     }
 
 

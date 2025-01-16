@@ -11296,8 +11296,8 @@ MonoBehaviour:
   forgetPassEmail: {fileID: 1266657065}
   notif_Title_text: {fileID: 2029461279}
   notif_Message_text: {fileID: 1969966487}
-  profile_UserName_text: {fileID: 0}
-  profile_UserEmail_text: {fileID: 0}
+  profile_UserName_text: {fileID: 703882352}
+  profile_UserEmail_text: {fileID: 1458422924}
   rememberMe: {fileID: 1029434189}
 --- !u!1 &1179460127
 GameObject:

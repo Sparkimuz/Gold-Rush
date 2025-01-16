@@ -14,12 +14,25 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
         // Impostiamo i valori iniziali degli slider
-        bgmSlider.value = bgmSource.volume;
-        sfxSlider.value = sfxSources[0].volume;  // Prendiamo il volume del primo SFX per iniziare
+        if (bgmSource != null && bgmSlider != null)
+        {
+            bgmSlider.value = bgmSource.volume;
+            bgmSlider.onValueChanged.AddListener(SetBGMVolume);
+        }
+        else
+        {
+            Debug.LogWarning("BGM Source o Slider non assegnato nell'Inspector.");
+        }
 
-        // Aggiungiamo i listener agli slider
-        bgmSlider.onValueChanged.AddListener(SetBGMVolume);
-        sfxSlider.onValueChanged.AddListener(SetSFXVolume);
+        if (sfxSources != null && sfxSources.Length > 0 && sfxSlider != null)
+        {
+            sfxSlider.value = sfxSources[0].volume;
+            sfxSlider.onValueChanged.AddListener(SetSFXVolume);
+        }
+        else
+        {
+            Debug.LogWarning("SFX Sources o Slider non assegnato correttamente nell'Inspector.");
+        }
     }
 
     // Metodo per controllare il volume della musica
