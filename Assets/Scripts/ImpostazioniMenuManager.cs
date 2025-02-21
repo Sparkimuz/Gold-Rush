@@ -72,11 +72,19 @@ public class ImpostazioniMenuManager : MonoBehaviour
 
     public void logOut()
     {
+        Firebase.Auth.FirebaseAuth auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+        auth.SignOut();
+
+        Debug.Log("🔄 Logout completato, resetto FirebaseController.");
         profileStatisticLogoutPanel?.SetActive(false);
         mainMenuPanel.SetActive(false);
+
         DestroyFirebaseController();
+
+        // Torna alla scena di login
         SceneManager.LoadScene(2);
     }
+
 
     void OnDestroy()
     {
@@ -89,12 +97,16 @@ public class ImpostazioniMenuManager : MonoBehaviour
     {
         if (FirebaseController.Instance != null)
         {
-            Debug.Log("Tentativo di distruggere FirebaseController, ma la distruzione è stata annullata.");
-            // Commenta la linea seguente per evitare la distruzione
-            // Destroy(FirebaseController.Instance.gameObject);
-            // FirebaseController.Instance = null;
+            Debug.Log("🚪 Logout effettuato, distruggo FirebaseController.");
+            Destroy(FirebaseController.Instance.gameObject);
+            FirebaseController.Instance = null; // Rimuovi il riferimento statico
+        }
+        else
+        {
+            Debug.Log("⚠️ FirebaseController non trovato, impossibile distruggere.");
         }
     }
+
 
     void UpdateProfileUI()
     {

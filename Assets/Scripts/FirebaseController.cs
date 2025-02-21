@@ -331,23 +331,16 @@ public class FirebaseController : MonoBehaviour
             bool signedIn = newUser != null && newUser.IsValid();
             if (!signedIn && user != null)
             {
-                Debug.Log("Utente disconnesso: " + user.UserId);
+                Debug.Log("🚪 Utente disconnesso, ricarico Firebase.");
+                FirebaseController.Instance = null; // Rimuovi la reference globale
             }
             user = newUser;
         }
 
-        if (user != null)
-        {
-            Debug.Log("Utente attuale: " + user.DisplayName + " | " + user.Email);
-        }
-        else
-        {
-            Debug.Log("Nessun utente autenticato.");
-        }
-
-        // 🔥 Notifica sempre gli altri script che l'utente è stato aggiornato
+        // 🔥 Avvisa gli altri script che Firebase è cambiato
         OnUserUpdated?.Invoke();
     }
+
 
 
 
