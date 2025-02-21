@@ -58,6 +58,38 @@ MonoBehaviour:
     m_Localized: TORNA AL MENU
     m_Metadata:
       m_Items: []
+  - m_Id: 5093669647548416
+    m_Localized: 
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48208825034080256
+    m_Localized: CREA NUOVO ACCOUNT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48210226506235904
+    m_Localized: ACCEDI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48210364276539392
+    m_Localized: PASSWORD DIMENTICATA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48210691562274816
+    m_Localized: INSERISCI IL TUO NOME UTENTE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48211250344230912
+    m_Localized: INSERISCI PASSWORD
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48216187094564864
+    m_Localized: REGISTRATI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48216651714396160
+    m_Localized: INDIETRO
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

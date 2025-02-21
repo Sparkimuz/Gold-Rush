@@ -167,7 +167,8 @@ public class FirebaseController : MonoBehaviour
 
         //do signup
 
-        CreateUser(signupEmail.text, signupPassword.text, signupPassword.text);
+        CreateUser(signupEmail.text, signupPassword.text, signupUsername.text);
+
     }
 
 

@@ -59,6 +59,34 @@ MonoBehaviour:
     m_Key: 
     m_Metadata:
       m_Items: []
+  - m_Id: 48208825034080256
+    m_Key: CREA NUOVO ACCOUNT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48210226506235904
+    m_Key: ACCEDI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48210364276539392
+    m_Key: PASSWORD DIMENTICATA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48210691562274816
+    m_Key: INSERISCI NOME UTENTE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48211250344230912
+    m_Key: INSERISCI PASSWORD
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48216187094564864
+    m_Key: REGISTRATI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48216651714396160
+    m_Key: INDIETRO
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
