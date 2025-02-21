@@ -13,6 +13,17 @@ public class LevelStarter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Assicurati che il FirebaseController esista
+        if (FirebaseController.Instance == null)
+        {
+            GameObject firebaseObj = GameObject.Find("FirebaseController");
+            if (firebaseObj == null)
+            {
+                firebaseObj = new GameObject("FirebaseController");
+                firebaseObj.AddComponent<FirebaseController>();
+            }
+        }
+
         MasterInfo.coinCount = 0;
         MovimentoGiocatore.canMove = true;
         StartCoroutine(CountSequence());

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -17,6 +17,7 @@ public class FirebaseController : MonoBehaviour
 
 
 {
+    public static event Action OnUserUpdated;
 
     public static FirebaseController Instance;
 
@@ -30,8 +31,8 @@ public class FirebaseController : MonoBehaviour
 
     public Toggle rememberMe;
 
-    Firebase.Auth.FirebaseAuth auth;
-    Firebase.Auth.FirebaseUser user;
+    public Firebase.Auth.FirebaseAuth auth;
+    public Firebase.Auth.FirebaseUser user;
     private DatabaseReference dbReference;
 
     bool isSignIn = false;
@@ -65,13 +66,15 @@ public class FirebaseController : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-
+            Debug.Log("🔥 FirebaseController creato e mantenuto.");
         }
         else
         {
+            Debug.Log("FirebaseController già esistente, distruggo il duplicato.");
             Destroy(gameObject);
         }
     }
+
 
     public void openForgetPasswordPanel()
     {
@@ -254,34 +257,25 @@ public class FirebaseController : MonoBehaviour
         {
             if (task.IsCanceled)
             {
-                Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
+                Debug.LogError("❌ Login annullato.");
                 return;
             }
             if (task.IsFaulted)
             {
-                Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
-
-                foreach (Exception exception in task.Exception.Flatten().InnerExceptions)
-                {
-                    if (exception is Firebase.FirebaseException firebaseEx)
-                    {
-                        var errorCode = (AuthError)firebaseEx.ErrorCode;
-                        Debug.LogError("Firebase Error Code: " + errorCode);
-                        showNotificationMessage("Error", GetErrorMessage(errorCode));
-                    }
-                }
+                Debug.LogError("❌ Errore nel login: " + task.Exception);
                 return;
             }
 
             Firebase.Auth.AuthResult result = task.Result;
-            Debug.LogFormat("User signed in successfully: {0} ({1})",
-                result.User.DisplayName, result.User.UserId);
+            user = result.User;
 
-            profile_UserName_text.text = result.User.DisplayName;
-            profile_UserEmail_text.text = result.User.Email;
-            SceneManager.LoadScene(0);
+            Debug.Log("✅ Login riuscito: " + user.DisplayName + " | " + user.Email);
+
+            // Notifica immediatamente gli altri script che l'utente è stato caricato
+            OnUserUpdated?.Invoke();
+
+            SceneManager.LoadScene(0); // Torna al menu principale
         });
-
     }
 
 
@@ -330,22 +324,34 @@ public class FirebaseController : MonoBehaviour
 
     void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
-        if (auth.CurrentUser != user)
+        FirebaseUser newUser = auth.CurrentUser;
+
+        if (newUser != user)
         {
-            bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null
-                && auth.CurrentUser.IsValid();
+            bool signedIn = newUser != null && newUser.IsValid();
             if (!signedIn && user != null)
             {
-                Debug.Log("Signed out " + user.UserId);
+                Debug.Log("Utente disconnesso: " + user.UserId);
             }
-            user = auth.CurrentUser;
-            if (signedIn)
-            {
-                Debug.Log("Signed in " + user.UserId);
-                isSignIn = true;
-            }
+            user = newUser;
         }
+
+        if (user != null)
+        {
+            Debug.Log("Utente attuale: " + user.DisplayName + " | " + user.Email);
+        }
+        else
+        {
+            Debug.Log("Nessun utente autenticato.");
+        }
+
+        // 🔥 Notifica sempre gli altri script che l'utente è stato aggiornato
+        OnUserUpdated?.Invoke();
     }
+
+
+
+
 
     void OnDestroy()
     {
@@ -371,18 +377,18 @@ public class FirebaseController : MonoBehaviour
             {
                 if (task.IsCanceled)
                 {
-                    Debug.LogError("UpdateUserProfileAsync was canceled.");
+                    Debug.LogError("UpdateUserProfileAsync cancellato.");
                     return;
                 }
                 if (task.IsFaulted)
                 {
-                    Debug.LogError("UpdateUserProfileAsync encountered an error: " + task.Exception);
+                    Debug.LogError("UpdateUserProfileAsync ha riscontrato un errore: " + task.Exception);
                     return;
                 }
 
-                Debug.Log("User profile updated successfully.");
+                Debug.Log("User profile aggiornato correttamente.");
 
-                showNotificationMessage("alert", "Account Created Succesfully!");
+                showNotificationMessage("alert", "Account Creato correttamente!");
             });
 
         }

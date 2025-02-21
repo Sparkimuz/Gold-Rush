@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,6 +10,21 @@ public class MainMenuFunction : MonoBehaviour
 
     void Start()
     {
+
+        // Assicurati che il FirebaseController esista
+        if (FirebaseController.Instance == null)
+        {
+            GameObject firebaseObj = GameObject.Find("FirebaseController");
+            if (firebaseObj == null)
+            {
+                firebaseObj = new GameObject("FirebaseController");
+                firebaseObj.AddComponent<FirebaseController>();
+            }
+        }
+
+
+
+
         // Assicurati che il pannello dello shop sia disattivato all'inizio
         if (shopPanel != null)
         {
@@ -28,22 +43,32 @@ public class MainMenuFunction : MonoBehaviour
 
     public void PlayGame()
     {
-        if (settingsMenu != null)
+        if (FirebaseController.Instance == null)
         {
-            settingsMenu.SetActive(false);
+            Debug.LogError("FirebaseController non trovato! Ricreazione in corso...");
+            GameObject firebaseObj = new GameObject("FirebaseController");
+            firebaseObj.AddComponent<FirebaseController>();
         }
-        SceneManager.LoadScene(1);
+
+        SceneManager.LoadScene(1 /*SceneManager.GetActiveScene().buildIndex*/);
+
+        //SceneManager.LoadScene(1, LoadSceneMode.Single);
     }
+
 
     public void Restart()
     {
-        // Ricarica la scena attuale
         if (settingsMenu != null)
         {
             settingsMenu.SetActive(false);
         }
-        SceneManager.LoadScene(1 /*SceneManager.GetActiveScene().buildIndex*/);
+
+        Time.timeScale = 1f; // Assicurati che il tempo riparta
+
+        SceneManager.LoadScene(1, LoadSceneMode.Single); // 🔥 Forza il reset totale della scena
     }
+
+
 
     public void GoToMenu()
     {
@@ -52,6 +77,7 @@ public class MainMenuFunction : MonoBehaviour
         {
             settingsMenu.SetActive(false);
         }
+
         SceneManager.LoadScene(0); // Sostituisci 0 con l'index della tua scena principale se necessario
     }
 

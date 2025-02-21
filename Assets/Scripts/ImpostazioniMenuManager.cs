@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -16,6 +16,21 @@ public class ImpostazioniMenuManager : MonoBehaviour
 
     void Start()
     {
+
+        FirebaseController.OnUserUpdated += UpdateProfileUI;
+
+        // 🔥 Se Firebase è già pronto, aggiorna subito la UI
+        if (FirebaseController.Instance != null && FirebaseController.Instance.user != null)
+        {
+            Debug.Log("🟢 Utente già caricato, aggiorno UI.");
+            UpdateProfileUI();
+        }
+        else
+        {
+            Debug.Log("⏳ Aspetto che Firebase carichi l'utente...");
+        }
+
+
         if (settingsPanel != null)
         {
             settingsPanel.SetActive(false);
@@ -25,25 +40,6 @@ public class ImpostazioniMenuManager : MonoBehaviour
         {
             profileStatisticLogoutPanel.SetActive(false);
         }
-
-
-        if (FirebaseController.Instance.profile_UserName_text.text==null)
-            profile_UserName_text.text = "ERRORE";
-        else
-            profile_UserName_text.text = FirebaseController.Instance.profile_UserName_text.text;
-
-
-
-        if (FirebaseController.Instance.profile_UserEmail_text.text == null)
-            profile_UserEmail_text.text = "ERRORE";
-        else
-            profile_UserEmail_text.text = FirebaseController.Instance.profile_UserEmail_text.text;
-
-
-        //profile_UserName_text.text = FirebaseController.Instance.profile_UserName_text.text;
-        //profile_UserEmail_text.text = FirebaseController.Instance.profile_UserEmail_text.text;
-        //profile_UserEmail_text.text = "a";
-        //profile_UserName_text.text = "b";
 
     }
 
@@ -82,12 +78,39 @@ public class ImpostazioniMenuManager : MonoBehaviour
         SceneManager.LoadScene(2);
     }
 
+    void OnDestroy()
+    {
+        // Evita memory leaks rimuovendo il listener quando l'oggetto viene distrutto
+        FirebaseController.OnUserUpdated -= UpdateProfileUI;
+    }
+
+
     void DestroyFirebaseController()
     {
         if (FirebaseController.Instance != null)
         {
-            Destroy(FirebaseController.Instance.gameObject);
-            FirebaseController.Instance = null; // Assicurati di rimuovere il riferimento statico
+            Debug.Log("Tentativo di distruggere FirebaseController, ma la distruzione è stata annullata.");
+            // Commenta la linea seguente per evitare la distruzione
+            // Destroy(FirebaseController.Instance.gameObject);
+            // FirebaseController.Instance = null;
+        }
+    }
+
+    void UpdateProfileUI()
+    {
+        Firebase.Auth.FirebaseUser user = FirebaseController.Instance.user;
+
+        if (user != null)
+        {
+            Debug.Log("🔄 Aggiorno UI con Nome: " + user.DisplayName + " | Email: " + user.Email);
+            profile_UserName_text.text = string.IsNullOrEmpty(user.DisplayName) ? "Nessun Nome" : user.DisplayName;
+            profile_UserEmail_text.text = string.IsNullOrEmpty(user.Email) ? "Nessuna Email" : user.Email;
+        }
+        else
+        {
+            Debug.LogError("❌ ERRORE: Utente nullo in FirebaseController!");
+            profile_UserName_text.text = "ERRORE";
+            profile_UserEmail_text.text = "ERRORE";
         }
     }
 

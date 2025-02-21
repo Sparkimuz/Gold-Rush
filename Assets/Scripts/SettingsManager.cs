@@ -8,6 +8,19 @@ public class SettingsManager : MonoBehaviour
     // Metodo di inizializzazione
     void Start()
     {
+
+        // Assicurati che il FirebaseController esista
+        if (FirebaseController.Instance == null)
+        {
+            GameObject firebaseObj = GameObject.Find("FirebaseController");
+            if (firebaseObj == null)
+            {
+                firebaseObj = new GameObject("FirebaseController");
+                firebaseObj.AddComponent<FirebaseController>();
+            }
+        }
+
+
         // All'avvio, disattiva il pannello delle impostazioni
         if (settingsPanel != null)
         {
