@@ -77,11 +77,7 @@ public class MainMenuFunction : MonoBehaviour
         {
             settingsMenu.SetActive(false);
         }
-<<<<<<< Updated upstream
-
-=======
         Time.timeScale = 1f;
->>>>>>> Stashed changes
         SceneManager.LoadScene(0); // Sostituisci 0 con l'index della tua scena principale se necessario
     }
 
