@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 7900b02785f0cb4489721a4c08f53e1c
   - enabled: 1
-    path: Assets/Scenes/JustRun.unity
+    path: Assets/Scenes/Gold Rush.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Scenes/FirebaseAuth.unity
