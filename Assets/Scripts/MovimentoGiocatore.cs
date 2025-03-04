@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class MovimentoGiocatore : MonoBehaviour
 {
+    private GameObject currentCharacter;  // Il modello attuale del personaggio
     public float initialSpeed = 2; // Velocità iniziale del giocatore
     public float growthRate = 0.5f; // Tasso di crescita logaritmica
     public float horizontalSpeed = 3;
@@ -12,6 +13,7 @@ public class MovimentoGiocatore : MonoBehaviour
     public bool isJumping = false;
     public float jumpHeight = 3; // Altezza del salto
     public float timeInAir = 1; // Tempo totale in aria
+    private Animator animator;
     public GameObject playerObject;
 
     private float originalY; // Posizione Y iniziale del personaggio
@@ -27,12 +29,45 @@ public class MovimentoGiocatore : MonoBehaviour
 
     void Start()
     {
-        // Memorizza la posizione Y originale del personaggio
+        animator = GetComponent<Animator>(); //Assicura che il personaggio abbia un animator
         originalY = transform.position.y;
+
+        int selectedCharacterIndex = PlayerPrefs.GetInt("SelectedCharacter", 0);
+        GameObject selectedCharacterPrefab = FindObjectOfType<CharacterManager>().characters[selectedCharacterIndex].characterPrefab;
+
+        if (selectedCharacterPrefab != null)
+        {
+            Debug.Log("✅ Personaggio selezionato: " + selectedCharacterPrefab.name);
+
+            if (playerObject != null)
+            {
+                Destroy(playerObject); // Elimina il modello precedente se esiste
+            }
+
+            currentCharacter = Instantiate(selectedCharacterPrefab, transform.position, transform.rotation);
+            currentCharacter.transform.parent = transform;
+            playerObject = currentCharacter;
+
+            Debug.Log("✅ Nuovo personaggio attivato: " + currentCharacter.name);
+        }
+        else
+        {
+            Debug.LogError("❌ ERRORE: Il prefab del personaggio selezionato è nullo!");
+        }
     }
+
 
     void Update()
     {
+
+            // Controlla se il personaggio sta correndo
+        animator.SetBool("IsJumping", isJumping);
+
+        // Se il giocatore perde, attiva l'animazione di caduta
+        if (CollisioneOstacolo.lostGame)
+        {
+            animator.SetBool("HasLost", true);
+        }
         if (canMove)
         {
             // Aggiorna la distanza percorsa

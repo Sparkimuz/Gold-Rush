@@ -23,13 +23,21 @@ public class CoinManager : MonoBehaviour
     public static bool SpendCoins(int amount)
     {
         int currentCoins = GetTotalCoins();
+        Debug.Log("Tentativo di acquisto - Monete attuali: " + currentCoins + " - Costo: " + amount);
+
         if (currentCoins >= amount)
         {
             currentCoins -= amount;
             PlayerPrefs.SetInt(TotalCoinsKey, currentCoins);
             PlayerPrefs.Save();
+            Debug.Log("Acquisto riuscito! Monete rimanenti: " + currentCoins);
             return true;
         }
-        return false;
+        else
+        {
+            Debug.Log("Acquisto fallito: monete insufficienti!");
+            return false;
+        }
     }
+
 }
