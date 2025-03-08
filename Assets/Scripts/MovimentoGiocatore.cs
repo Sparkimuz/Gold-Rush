@@ -3,98 +3,150 @@ using UnityEngine;
 
 public class MovimentoGiocatore : MonoBehaviour
 {
-    private GameObject currentCharacter;  // Il modello attuale del personaggio
-    public float initialSpeed = 2; // Velocità iniziale del giocatore
-    public float growthRate = 0.5f; // Tasso di crescita logaritmica
-    public float horizontalSpeed = 3;
+    // Riferimento al modello effettivo istanziato
+    static private GameObject modelObject;
+
+    // Parametri di movimento
+    public float initialSpeed = 2f;
+    public float growthRate = 0.5f;
+    public float horizontalSpeed = 3f;
     public float rightLimit = 3.2f;
     public float leftLimit = -3.2f;
     public static bool canMove = false;
+
+    // Parametri di salto
     public bool isJumping = false;
-    public float jumpHeight = 3; // Altezza del salto
-    public float timeInAir = 1; // Tempo totale in aria
-    private Animator animator;
-    public GameObject playerObject;
+    public float jumpHeight = 3f;
+    public float timeInAir = 1f;
 
-    private float originalY; // Posizione Y iniziale del personaggio
-    private float epsilon = 0.01f; // Tolleranza per piccoli errori di calcolo
-    private float distanceCovered = 0; // Distanza percorsa dal giocatore
+    private float originalY;
+    private float epsilon = 0.01f;
+    private float distanceCovered = 0f;
+    public float playerSpeed;
 
-    public float playerSpeed; // Velocità attuale del giocatore
-
-    // Variabili per il rilevamento dello swipe
+    // Variabili per lo swipe su mobile
     private Vector2 startTouchPosition;
     private Vector2 endTouchPosition;
-    private float swipeThreshold = 50f; // Distanza minima dello swipe per essere considerato valido
+    private float swipeThreshold = 50f;
 
     void Start()
     {
-        animator = GetComponent<Animator>(); //Assicura che il personaggio abbia un animator
+        CollisioneOstacolo.lostGame = false;
+        Debug.Log("MovimentoGiocatore.Start(): lostGame = " + CollisioneOstacolo.lostGame);
+
+        // Memorizza l’altezza iniziale
         originalY = transform.position.y;
 
-        int selectedCharacterIndex = PlayerPrefs.GetInt("SelectedCharacter", 0);
-        GameObject selectedCharacterPrefab = FindObjectOfType<CharacterManager>().characters[selectedCharacterIndex].characterPrefab;
+        // Recupera l’indice del personaggio selezionato
+        int selectedIndex = PlayerPrefs.GetInt("SelectedCharacter", 0);
+        Debug.Log("Personaggio selezionato: " + selectedIndex);
 
-        if (selectedCharacterPrefab != null)
+        // Trova il CharacterManager
+        CharacterManager cm = FindObjectOfType<CharacterManager>();
+        if (cm == null)
         {
-            Debug.Log("✅ Personaggio selezionato: " + selectedCharacterPrefab.name);
+            Debug.LogError("CharacterManager non trovato in scena!");
+            return;
+        }
 
-            if (playerObject != null)
+        // Prendi il prefab del personaggio
+        if (selectedIndex < 0 || selectedIndex >= cm.characters.Count)
+        {
+            Debug.LogError("Indice personaggio non valido: " + selectedIndex);
+            return;
+        }
+        GameObject selectedPrefab = cm.characters[selectedIndex].gamePrefab;
+
+        if (selectedPrefab == null)
+        {
+            Debug.LogError("Prefab del personaggio selezionato è nullo!");
+            return;
+        }
+        Debug.Log("Prefab selezionato: " + selectedPrefab.name);
+
+        // LOG per vedere i figli esistenti PRIMA di distruggerli
+        Debug.Log($"Prima di distruggere i figli, transform ha {transform.childCount} child.");
+
+        // Se avevi già un modello, lo distruggi prima (in caso di reload della scena)
+        foreach (Transform child in transform)
+        {
+            // Aggiungiamo un log per capire cosa c'è come figlio
+            Debug.Log($"Trovo child '{child.name}' con tag '{child.tag}'.");
+            if (child.CompareTag("PlayerModel"))
             {
-                Destroy(playerObject); // Elimina il modello precedente se esiste
+                Debug.Log($"-- Distruggo '{child.name}' perché ha il tag 'PlayerModel'.");
+                Destroy(child.gameObject);
             }
-
-            currentCharacter = Instantiate(selectedCharacterPrefab, transform.position, transform.rotation);
-            currentCharacter.transform.parent = transform;
-            playerObject = currentCharacter;
-
-            Debug.Log("✅ Nuovo personaggio attivato: " + currentCharacter.name);
         }
-        else
+
+        // LOG per vedere quanti figli rimangono
+        Debug.Log($"Dopo il ciclo di distruzione, transform ha {transform.childCount} child.");
+
+        // Istanzia il nuovo modello come figlio di questo "PlayerRoot"
+        modelObject = Instantiate(selectedPrefab, transform.position, transform.rotation);
+        modelObject.transform.SetParent(this.transform, false);
+
+        // Azzera la trasformazione locale per farlo combaciare col pivot del Player
+        // Ad esempio, posizione locale a (0, -0.69, 0)
+        modelObject.transform.localPosition = new Vector3(0f, -0.69f, 0f);
+        modelObject.transform.localRotation = Quaternion.identity;
+
+        // Assegna il tag "PlayerModel" così la prossima volta potrai distruggerlo
+        modelObject.tag = "PlayerModel";
+        CollisioneOstacolo.charModel = modelObject;
+
+        Debug.Log("Nuovo personaggio attivato: " + modelObject.name);
+
+
+        /* Animator anim = modelObject.GetComponent<Animator>();
+        if (anim != null)
         {
-            Debug.LogError("❌ ERRORE: Il prefab del personaggio selezionato è nullo!");
-        }
-    }
+            anim.SetBool("HasLost", false);
+            Debug.Log("MovimentoGiocatore.Start(): SetBool('HasLost', false)");
 
+            anim.Play("Fast Run");
+            Debug.Log("MovimentoGiocatore.Start(): Forzo animazione 'Fast Run'");
+        } */
+    }
 
     void Update()
     {
-
-            // Controlla se il personaggio sta correndo
-        animator.SetBool("IsJumping", isJumping);
-
-        // Se il giocatore perde, attiva l'animazione di caduta
+        // Se il giocatore ha perso
         if (CollisioneOstacolo.lostGame)
         {
-            animator.SetBool("HasLost", true);
+            Debug.Log("MovimentoGiocatore.Update(): lostGame == true; imposta 'HasLost' a true");
+            Animator modelAnimator = modelObject ? modelObject.GetComponent<Animator>() : null;
+            if (modelAnimator != null)
+            {
+                modelAnimator.SetBool("HasLost", true);
+            }
         }
+
+        // Se possiamo muoverci
         if (canMove)
         {
-            // Aggiorna la distanza percorsa
+            // Aumenta la distanza percorsa
             distanceCovered += Time.deltaTime * initialSpeed;
-
-            // Calcola la velocità logaritmica
+            // Calcola velocità logaritmica
             playerSpeed = initialSpeed + Mathf.Log(1 + distanceCovered) * growthRate;
 
-            // Movimento in avanti con la velocità logaritmica
+            // Movimento in avanti
             transform.Translate(Vector3.forward * Time.deltaTime * playerSpeed, Space.World);
 
-            // Gestisci input per PC e mobile
             HandleInput();
         }
     }
 
     void HandleInput()
     {
-        // Controllo degli input da tastiera per PC
-        if (Application.platform != RuntimePlatform.Android && Application.platform != RuntimePlatform.IPhonePlayer)
-        {
-            HandleKeyboardInput();
-        }
-        // Controllo degli input touch per mobile
-        else
+        // Differenzia input PC da input mobile
+        if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
         {
             HandleTouchInput();
+        }
+        else
+        {
+            HandleKeyboardInput();
         }
     }
 
@@ -105,7 +157,7 @@ public class MovimentoGiocatore : MonoBehaviour
         {
             if (transform.position.x > leftLimit)
             {
-                transform.Translate(Vector3.left * Time.deltaTime * horizontalSpeed);
+                transform.Translate(Vector3.left * horizontalSpeed * Time.deltaTime);
             }
         }
 
@@ -114,7 +166,7 @@ public class MovimentoGiocatore : MonoBehaviour
         {
             if (transform.position.x < rightLimit)
             {
-                transform.Translate(Vector3.right * Time.deltaTime * horizontalSpeed);
+                transform.Translate(Vector3.right * horizontalSpeed * Time.deltaTime);
             }
         }
 
@@ -122,54 +174,39 @@ public class MovimentoGiocatore : MonoBehaviour
         if (Input.GetButtonDown("Jump") && !isJumping)
         {
             isJumping = true;
-            playerObject.GetComponent<Animator>().Play("Jump"); // Esegui animazione di salto
+            PlayModelAnimation("Jump");
             StartCoroutine(JumpSequence());
         }
     }
 
     void HandleTouchInput()
     {
-        // Controlla se ci sono tocchi sullo schermo
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
 
-            // Gestisci il movimento laterale
+            // Movimento laterale durante il touch
             if (touch.phase == TouchPhase.Moved)
             {
                 float move = touch.deltaPosition.x * horizontalSpeed * Time.deltaTime;
-
-                // Movimento a sinistra
-                if (move < 0 && transform.position.x > leftLimit)
-                {
-                    transform.Translate(Vector3.left * Mathf.Abs(move));
-                }
-                // Movimento a destra
-                else if (move > 0 && transform.position.x < rightLimit)
-                {
-                    transform.Translate(Vector3.right * Mathf.Abs(move));
-                }
+                float newX = Mathf.Clamp(transform.position.x + move, leftLimit, rightLimit);
+                transform.position = new Vector3(newX, transform.position.y, transform.position.z);
             }
 
-            // Gestione dello swipe per il salto
+            // Swipe per salto
             if (touch.phase == TouchPhase.Began)
             {
-                // Memorizza la posizione iniziale del tocco
                 startTouchPosition = touch.position;
             }
             else if (touch.phase == TouchPhase.Ended)
             {
-                // Memorizza la posizione finale del tocco
                 endTouchPosition = touch.position;
-
-                // Calcola la distanza dello swipe
                 float swipeDistance = endTouchPosition.y - startTouchPosition.y;
 
-                // Controlla se è uno swipe verso l'alto
                 if (swipeDistance > swipeThreshold && !isJumping)
                 {
                     isJumping = true;
-                    playerObject.GetComponent<Animator>().Play("Jump"); // Esegui animazione di salto
+                    PlayModelAnimation("Jump");
                     StartCoroutine(JumpSequence());
                 }
             }
@@ -178,38 +215,49 @@ public class MovimentoGiocatore : MonoBehaviour
 
     IEnumerator JumpSequence()
     {
-        // Fase di salto (salita)
-        float jumpSpeed = jumpHeight / (timeInAir / 2); // Velocità per salire fino all'altezza di salto
-        float elapsedTime = 0;
+        float jumpSpeed = jumpHeight / (timeInAir / 2f);
+        float elapsed = 0f;
 
-        // Salita
-        while (elapsedTime < timeInAir / 2)
+        // Fase di salita
+        while (elapsed < timeInAir / 2f)
         {
             transform.Translate(Vector3.up * jumpSpeed * Time.deltaTime, Space.World);
-            elapsedTime += Time.deltaTime;
+            elapsed += Time.deltaTime;
             yield return null;
         }
 
-        // Fase di discesa (discesa)
-        elapsedTime = 0;
-        while (elapsedTime < timeInAir / 2)
+        // Fase di discesa
+        elapsed = 0f;
+        while (elapsed < timeInAir / 2f)
         {
-            // Controllo se il personaggio è sceso al di sotto della sua altezza originale
             if (transform.position.y <= originalY + epsilon)
             {
                 transform.position = new Vector3(transform.position.x, originalY, transform.position.z);
                 break;
             }
             transform.Translate(Vector3.down * jumpSpeed * Time.deltaTime, Space.World);
-            elapsedTime += Time.deltaTime;
+            elapsed += Time.deltaTime;
             yield return null;
         }
 
-        // Forza la posizione Y alla fine del salto
+        // Rimetti il giocatore a terra in modo pulito
         transform.position = new Vector3(transform.position.x, originalY, transform.position.z);
 
-        // Fine del salto, reset variabili e animazione
         isJumping = false;
-        playerObject.GetComponent<Animator>().Play("Fast Run 1"); // Ritorno all'animazione di corsa
+        // Torna all'animazione di corsa
+        PlayModelAnimation("Fast Run");
+    }
+
+    // Metodo di utilità per avviare animazioni sul modello
+    public static void PlayModelAnimation(string animationName)
+    {
+        if (modelObject != null)
+        {
+            Animator anim = modelObject.GetComponent<Animator>();
+            if (anim != null)
+            {
+                anim.Play(animationName);
+            }
+        }
     }
 }

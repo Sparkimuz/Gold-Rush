@@ -7,9 +7,27 @@ public class CharacterManager : MonoBehaviour
     public class Character
     {
         public string characterName;
-        public GameObject characterPrefab; // Il modello 3D del personaggio
+        public GameObject shopPrefab; // Il modello 3D del personaggio
+        public GameObject gamePrefab;  // Modello/animator per il gioco (FastRun, Jump, ecc.)
         public int cost;
         public bool isPurchased;
+    }
+        void Awake()
+    {
+        // Impedisce che questo GameObject venga distrutto
+        // quando carichi una nuova scena
+        DontDestroyOnLoad(this.gameObject);
+
+        // Se vuoi essere sicuro di avere solo un CharacterManager,
+        // puoi aggiungere un controllo anti-duplicato
+        // e distruggere eventuali duplicati:
+        /*
+        var existingManagers = FindObjectsOfType<CharacterManager>();
+        if (existingManagers.Length > 1)
+        {
+            Destroy(gameObject);
+        }
+        */
     }
 
     public List<Character> characters = new List<Character>();
@@ -60,6 +78,6 @@ public class CharacterManager : MonoBehaviour
     // Metodo per ottenere il personaggio selezionato attualmente
     public GameObject GetSelectedCharacter()
     {
-        return characters[selectedCharacterIndex].characterPrefab;
+        return characters[selectedCharacterIndex].shopPrefab;
     }
 }

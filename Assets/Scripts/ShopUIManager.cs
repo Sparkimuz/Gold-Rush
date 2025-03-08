@@ -72,11 +72,14 @@ public class ShopUIManager : MonoBehaviour
         // Attiva il modello del personaggio selezionato e disattiva gli altri
         for (int i = 0; i < characterManager.characters.Count; i++)
         {
-            var characterModel = characterManager.characters[i].characterPrefab;
-            characterModel.SetActive(i == currentCharacterIndex);
+            var c = characterManager.characters[i];
+            // Usa lo shopPrefab in negozio
+            if (c.shopPrefab != null)
+            {
+                c.shopPrefab.SetActive(i == currentCharacterIndex);
+            }
         }
     }
-
     public void OnPurchaseButtonClicked()
     {
         var character = characterManager.characters[currentCharacterIndex];
@@ -95,7 +98,6 @@ public class ShopUIManager : MonoBehaviour
             if (CoinManager.SpendCoins(character.cost))
             {
                 Debug.Log("💰 Acquisto effettuato per personaggio: " + currentCharacterIndex);
-                characterManager.PurchaseCharacter(currentCharacterIndex);
 
                 // Controlliamo se il personaggio è stato davvero acquistato
                 if (characterManager.characters[currentCharacterIndex].isPurchased)
