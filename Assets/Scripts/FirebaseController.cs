@@ -259,32 +259,49 @@ public class FirebaseController : MonoBehaviour
         });
     }
 
-    public void signInUser(string email, string password)
+   public void signInUser(string email, string password)
+{
+    auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task =>
     {
-        auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task =>
+        if (task.IsCanceled)
         {
-            if (task.IsCanceled)
+            Debug.LogError("❌ Login annullato.");
+            showNotificationMessage("Login Failed", "Login was canceled.");
+            return;
+        }
+        if (task.IsFaulted)
+        {
+            Debug.LogError("❌ Errore nel login: " + task.Exception);
+
+            foreach (Exception exception in task.Exception.Flatten().InnerExceptions)
             {
-                Debug.LogError("❌ Login annullato.");
-                return;
+                Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
+                if (firebaseEx != null)
+                {
+                    var errorCode = (AuthError)firebaseEx.ErrorCode;
+                    string errorMessage = GetErrorMessage(errorCode);
+                    showNotificationMessage("Login Failed", errorMessage);
+                    return;
+                }
             }
-            if (task.IsFaulted)
-            {
-                Debug.LogError("❌ Errore nel login: " + task.Exception);
-                return;
-            }
 
-            Firebase.Auth.AuthResult result = task.Result;
-            user = result.User;
+            // Se non si riesce a estrarre il codice di errore, mostra un messaggio generico
+            showNotificationMessage("Login Failed", "An unknown error occurred.");
+            return;
+        }
 
-            Debug.Log("✅ Login riuscito: " + user.DisplayName + " | " + user.Email);
+        Firebase.Auth.AuthResult result = task.Result;
+        user = result.User;
 
-            // Notifica immediatamente gli altri script che l'utente è stato caricato
-            OnUserUpdated?.Invoke();
+        Debug.Log("✅ Login riuscito: " + user.DisplayName + " | " + user.Email);
 
-            SceneManager.LoadScene(0); // Torna al menu principale
-        });
-    }
+        // Notifica immediatamente gli altri script che l'utente è stato caricato
+        OnUserUpdated?.Invoke();
+
+        SceneManager.LoadScene(0); // Torna al menu principale
+    });
+}
+
 
 
     private static string GetErrorMessage(AuthError errorCode)
