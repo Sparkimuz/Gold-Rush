@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Threading.Tasks; // Per supportare Task
 
 public class CharacterManager : MonoBehaviour
 {
@@ -12,29 +13,20 @@ public class CharacterManager : MonoBehaviour
         public int cost;
         public bool isPurchased;
     }
-        void Awake()
-    {
-        // Impedisce che questo GameObject venga distrutto
-        // quando carichi una nuova scena
-        DontDestroyOnLoad(this.gameObject);
 
-        // Se vuoi essere sicuro di avere solo un CharacterManager,
-        // puoi aggiungere un controllo anti-duplicato
-        // e distruggere eventuali duplicati:
-        /*
-        var existingManagers = FindObjectsOfType<CharacterManager>();
-        if (existingManagers.Length > 1)
-        {
-            Destroy(gameObject);
-        }
-        */
+    void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
     }
 
     public List<Character> characters = new List<Character>();
     private int selectedCharacterIndex = 0;
 
+
+
+
     // Metodo per acquistare un personaggio
-    public void PurchaseCharacter(int index)
+    public async void PurchaseCharacter(int index)
     {
         if (characters[index].isPurchased)
         {
@@ -42,42 +34,78 @@ public class CharacterManager : MonoBehaviour
             return;
         }
 
-        int currentCoins = CoinManager.GetTotalCoins();
-
-        if (characters[index].cost <= currentCoins)
+        // Attende il valore delle monete da Firebase
+        FirebaseController.Instance.LoadCoins(async (currentCoins) =>
         {
-            Debug.Log("✅ Personaggio " + index + " acquistato con successo!");
+            if (characters[index].cost <= currentCoins)
+            {
+                Debug.Log("✅ Personaggio " + index + " acquistato con successo!");
+                characters[index].isPurchased = true;
 
-            characters[index].isPurchased = true; // ⬅️ ASSICURA CHE VENGA SEGNATO COME ACQUISTATO
-            CoinManager.SpendCoins(characters[index].cost);
+                int newCoinBalance = currentCoins - characters[index].cost;
+                await FirebaseController.Instance.SaveCoins(newCoinBalance);
 
-            // Salva nei PlayerPrefs
-            PlayerPrefs.SetInt("CharacterPurchased_" + index, 1);
-            PlayerPrefs.Save();
-        }
-        else
-        {
-            Debug.LogError("❌ ERRORE: Monete non sufficienti per acquistare il personaggio.");
-        }
+                PlayerPrefs.SetInt("CharacterPurchased_" + index, 1);
+                PlayerPrefs.Save();
+            }
+            else
+            {
+                Debug.LogError("❌ ERRORE: Monete non sufficienti per acquistare il personaggio.");
+            }
+        });
     }
 
-
-
     // Metodo per selezionare un personaggio
-    public void SelectCharacter(int index)
+    public async Task SelectCharacter(int index)
     {
         if (characters[index].isPurchased)
         {
-        selectedCharacterIndex = index;
-        PlayerPrefs.SetInt("SelectedCharacter", index);
-        PlayerPrefs.Save();
+            selectedCharacterIndex = index;
+
+            // Salva il personaggio selezionato su Firebase invece di PlayerPrefs
+            if (FirebaseController.Instance.user != null)
+            {
+                string userId = FirebaseController.Instance.user.UserId;
+                await FirebaseController.Instance.dbReference
+                    .Child("users").Child(userId).Child("selectedCharacter")
+                    .SetValueAsync(index);
+            }
+
+            PlayerPrefs.SetInt("SelectedCharacter", index); // Per backup locale
+            PlayerPrefs.Save();
         }
     }
 
+    // Metodo asincrono per caricare il personaggio selezionato da Firebase
+    public async Task LoadSelectedCharacter()
+    {
+        if (FirebaseController.Instance.user != null)
+        {
+            string userId = FirebaseController.Instance.user.UserId;
+            var characterTask = FirebaseController.Instance.dbReference
+                .Child("users").Child(userId).Child("selectedCharacter").GetValueAsync();
 
-    // Metodo per ottenere il personaggio selezionato attualmente
+            await characterTask;
+
+            if (characterTask.Result.Exists)
+            {
+                selectedCharacterIndex = int.Parse(characterTask.Result.Value.ToString());
+                PlayerPrefs.SetInt("SelectedCharacter", selectedCharacterIndex); // Backup locale
+                PlayerPrefs.Save();
+            }
+            else
+            {
+                Debug.Log("⚠️ Nessun personaggio selezionato trovato, uso quello di default.");
+            }
+        }
+    }
+
+    // Metodo corretto per restituire il personaggio selezionato in gioco
     public GameObject GetSelectedCharacter()
     {
-        return characters[selectedCharacterIndex].shopPrefab;
+        //return characters[selectedCharacterIndex].gamePrefab;  forse è piu corretta, da verificare
+        return characters[selectedCharacterIndex].shopPrefab; // Usa il modello corretto per il gameplay
+
     }
+
 }

@@ -1,4 +1,6 @@
+using Firebase.Database;
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class MovimentoGiocatore : MonoBehaviour
@@ -29,7 +31,7 @@ public class MovimentoGiocatore : MonoBehaviour
     private Vector2 endTouchPosition;
     private float swipeThreshold = 50f;
 
-    void Start()
+   /* void Start()
     {
         CollisioneOstacolo.lostGame = false;
         Debug.Log("MovimentoGiocatore.Start(): lostGame = " + CollisioneOstacolo.lostGame);
@@ -98,16 +100,109 @@ public class MovimentoGiocatore : MonoBehaviour
         Debug.Log("Nuovo personaggio attivato: " + modelObject.name);
 
 
-        /* Animator anim = modelObject.GetComponent<Animator>();
-        if (anim != null)
-        {
-            anim.SetBool("HasLost", false);
-            Debug.Log("MovimentoGiocatore.Start(): SetBool('HasLost', false)");
+        // Animator anim = modelObject.GetComponent<Animator>();
+        //if (anim != null)
+        //{
+          //  anim.SetBool("HasLost", false);
+            //Debug.Log("MovimentoGiocatore.Start(): SetBool('HasLost', false)");
 
-            anim.Play("Fast Run");
-            Debug.Log("MovimentoGiocatore.Start(): Forzo animazione 'Fast Run'");
-        } */
+            //anim.Play("Fast Run");
+            //Debug.Log("MovimentoGiocatore.Start(): Forzo animazione 'Fast Run'");
+        //}
+    } */
+
+
+
+    void Start()
+    {
+        CollisioneOstacolo.lostGame = false;
+        Debug.Log("MovimentoGiocatore.Start(): lostGame = " + CollisioneOstacolo.lostGame);
+
+        originalY = transform.position.y;
+
+        // ⚠️ RIMUOVI QUESTO: `PlayerPrefs.GetInt`
+        // int selectedIndex = PlayerPrefs.GetInt("SelectedCharacter", 0);
+
+        StartCoroutine(LoadSelectedCharacter());
     }
+
+    IEnumerator LoadSelectedCharacter()
+    {
+        if (FirebaseController.Instance.user == null)
+        {
+            Debug.LogError("❌ Nessun utente loggato, impossibile caricare il personaggio!");
+            yield break;
+        }
+
+        string userId = FirebaseController.Instance.user.UserId;
+        var dbRef = FirebaseController.Instance.dbReference;
+
+        Task<DataSnapshot> task = dbRef.Child("users").Child(userId).Child("selectedCharacter").GetValueAsync();
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        if (task.Result.Exists)
+        {
+            int selectedIndex = int.Parse(task.Result.Value.ToString());
+            Debug.Log("✅ Personaggio selezionato recuperato da Firebase: " + selectedIndex);
+
+            // Dopo aver ottenuto l'indice, carica il personaggio
+            LoadCharacterModel(selectedIndex);
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ Nessun personaggio selezionato trovato, imposto default (0).");
+            LoadCharacterModel(0);
+        }
+    }
+
+
+    void LoadCharacterModel(int selectedIndex)
+    {
+        CharacterManager cm = FindObjectOfType<CharacterManager>();
+        if (cm == null)
+        {
+            Debug.LogError("❌ CharacterManager non trovato in scena!");
+            return;
+        }
+
+        if (selectedIndex < 0 || selectedIndex >= cm.characters.Count)
+        {
+            Debug.LogError("❌ Indice personaggio non valido: " + selectedIndex);
+            return;
+        }
+
+        GameObject selectedPrefab = cm.characters[selectedIndex].gamePrefab;
+        if (selectedPrefab == null)
+        {
+            Debug.LogError("❌ Il prefab del personaggio selezionato è nullo!");
+            return;
+        }
+
+        Debug.Log("🎭 Prefab selezionato: " + selectedPrefab.name);
+
+        // Rimuove eventuali modelli esistenti prima di istanziare il nuovo
+        foreach (Transform child in transform)
+        {
+            if (child.CompareTag("PlayerModel"))
+            {
+                Debug.Log($"🚮 Rimuovo modello precedente: {child.name}");
+                Destroy(child.gameObject);
+            }
+        }
+
+        // Istanzia il nuovo modello
+        modelObject = Instantiate(selectedPrefab, transform.position, transform.rotation);
+        modelObject.transform.SetParent(this.transform, false);
+        modelObject.transform.localPosition = new Vector3(0f, -0.69f, 0f);
+        modelObject.transform.localRotation = Quaternion.identity;
+
+        modelObject.tag = "PlayerModel";
+        CollisioneOstacolo.charModel = modelObject;
+
+        Debug.Log("✅ Nuovo personaggio attivato: " + modelObject.name);
+    }
+
+
 
     void Update()
     {

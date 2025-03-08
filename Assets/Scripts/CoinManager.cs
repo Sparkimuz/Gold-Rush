@@ -1,3 +1,4 @@
+﻿using System;
 using UnityEngine;
 
 public class CoinManager : MonoBehaviour
@@ -5,39 +6,56 @@ public class CoinManager : MonoBehaviour
     private const string TotalCoinsKey = "TotalCoins";
 
     // Ottieni il totale delle monete salvate
-    public static int GetTotalCoins()
+    public static void GetTotalCoins(Action<int> callback)
     {
-        return PlayerPrefs.GetInt(TotalCoinsKey, 0);
+        if (FirebaseController.Instance == null)
+        {
+            Debug.LogError("❌ FirebaseController non è pronto!");
+            callback?.Invoke(0);
+            return;
+        }
+
+        FirebaseController.Instance.LoadCoins(coins =>
+        {
+            Debug.Log("🎮 Monete caricate da Firebase: " + coins);
+            callback?.Invoke(coins); // 🔥 Ora restituisce il valore quando è pronto
+        });
     }
+
+
+
+
+
 
     // Aggiungi monete al totale e salva
     public static void AddCoins(int amount)
     {
-        int currentCoins = GetTotalCoins();
-        currentCoins += amount;
-        PlayerPrefs.SetInt(TotalCoinsKey, currentCoins);
-        PlayerPrefs.Save();
+        GetTotalCoins(currentCoins =>
+        {
+            int newTotal = currentCoins + amount;
+            FirebaseController.Instance.SaveCoins(newTotal);
+            Debug.Log("💰 Monete aggiunte! Nuovo totale: " + newTotal);
+        });
     }
 
     // Riduci le monete quando si compra qualcosa
-    public static bool SpendCoins(int amount)
+    public static void SpendCoins(int amount, Action<bool> callback)
     {
-        int currentCoins = GetTotalCoins();
-        Debug.Log("Tentativo di acquisto - Monete attuali: " + currentCoins + " - Costo: " + amount);
-
-        if (currentCoins >= amount)
+        GetTotalCoins(currentCoins =>
         {
-            currentCoins -= amount;
-            PlayerPrefs.SetInt(TotalCoinsKey, currentCoins);
-            PlayerPrefs.Save();
-            Debug.Log("Acquisto riuscito! Monete rimanenti: " + currentCoins);
-            return true;
-        }
-        else
-        {
-            Debug.Log("Acquisto fallito: monete insufficienti!");
-            return false;
-        }
+            if (currentCoins >= amount)
+            {
+                int newTotal = currentCoins - amount;
+                FirebaseController.Instance.SaveCoins(newTotal);
+                Debug.Log("💸 Monete spese! Nuovo totale: " + newTotal);
+                callback?.Invoke(true);
+            }
+            else
+            {
+                Debug.Log("❌ Monete insufficienti!");
+                callback?.Invoke(false);
+            }
+        });
     }
 
 }

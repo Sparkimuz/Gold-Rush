@@ -3,117 +3,98 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
+using System.Threading.Tasks; // Per Task
 
 public class ShopUIManager : MonoBehaviour
 {
-    public TMP_Text warningMessageText; // Riferimento al messaggio di avviso
+    public TMP_Text warningMessageText;
     public CharacterManager characterManager;
     public TMP_Text characterNameText;
     public TMP_Text characterCostText;
-    public TMP_Text totalCoinsText; // Riferimento al testo delle monete totali
+    public TMP_Text totalCoinsText;
     public Button purchaseButton;
     public TMP_Text purchaseButtonText;
     public GameObject shopPanel;
 
     private int currentCharacterIndex = 0;
 
-    void Start()
+    async void Start()
     {
-        UpdateCharacterUI();
-        UpdateTotalCoinsUI(); // Aggiorna il totale delle monete quando si avvia lo shop
+        currentCharacterIndex = await GetSelectedCharacterIndex(); // Inizializza con il personaggio dell'utente
+        await UpdateTotalCoinsUI();
+        await UpdateCharacterUI();
     }
+
 
     public void NextCharacter()
     {
         currentCharacterIndex = (currentCharacterIndex + 1) % characterManager.characters.Count;
-        UpdateCharacterUI();
+        _ = UpdateCharacterUI(); // Ignoriamo il Task per evitare errori
     }
 
     public void PreviousCharacter()
     {
         currentCharacterIndex = (currentCharacterIndex - 1 + characterManager.characters.Count) % characterManager.characters.Count;
-        UpdateCharacterUI();
+        _ = UpdateCharacterUI();
     }
 
-
-    private void UpdateCharacterUI()
+    private async Task UpdateCharacterUI()
     {
         var character = characterManager.characters[currentCharacterIndex];
 
-        // Ricarica dai PlayerPrefs
-        character.isPurchased = PlayerPrefs.GetInt("CharacterPurchased_" + currentCharacterIndex, 0) == 1;
-        int selectedCharacterIndex = PlayerPrefs.GetInt("SelectedCharacter", 0);
+        character.isPurchased = await IsCharacterPurchased(currentCharacterIndex);
+        int selectedCharacterIndex = await GetSelectedCharacterIndex();
 
-        // Aggiorna il nome e il prezzo/acquisto
         characterNameText.text = character.characterName;
         characterCostText.text = character.isPurchased ? "Comprato" : character.cost.ToString();
 
-        //Attiva Personaggi nel negozio
         AttivaPersonaggio();
 
+        purchaseButtonText.text = character.isPurchased
+            ? (currentCharacterIndex == selectedCharacterIndex ? "Selezionato" : "Seleziona")
+            : "Compra";
 
-        // Mostra "Selezionato" solo per il personaggio attualmente scelto
-        if (character.isPurchased)
-        {
-            purchaseButtonText.text = (currentCharacterIndex == selectedCharacterIndex) ? "Selezionato" : "Seleziona";
-        }
-        else
-        {
-            purchaseButtonText.text = "Compra";
-        }
-
-
-
-        Debug.Log("UI aggiornata per personaggio " + currentCharacterIndex + " - Acquistato: " + character.isPurchased);
+        Debug.Log($"UI aggiornata per personaggio {currentCharacterIndex} - Acquistato: {character.isPurchased}");
     }
 
     private void AttivaPersonaggio()
     {
-        // Attiva il modello del personaggio selezionato e disattiva gli altri
         for (int i = 0; i < characterManager.characters.Count; i++)
         {
             var c = characterManager.characters[i];
-            // Usa lo shopPrefab in negozio
             if (c.shopPrefab != null)
             {
                 c.shopPrefab.SetActive(i == currentCharacterIndex);
             }
         }
     }
-    public void OnPurchaseButtonClicked()
+
+    public async void OnPurchaseButtonClicked()
     {
         var character = characterManager.characters[currentCharacterIndex];
 
-        Debug.Log("🛒 Bottone Acquista/Seleziona premuto per personaggio: " + currentCharacterIndex);
+        Debug.Log($"🛒 Bottone Acquista/Seleziona premuto per personaggio: {currentCharacterIndex}");
 
         if (character.isPurchased)
         {
-            characterManager.SelectCharacter(currentCharacterIndex);
-            PlayerPrefs.SetInt("SelectedCharacter", currentCharacterIndex);
-            PlayerPrefs.Save();
-            UpdateCharacterUI();
+            await characterManager.SelectCharacter(currentCharacterIndex);
+            await UpdateTotalCoinsUI();
+            await UpdateCharacterUI();
         }
         else
         {
-            if (CoinManager.SpendCoins(character.cost))
+            int currentCoins = await GetTotalCoins();
+            if (character.cost <= currentCoins)
             {
-                Debug.Log("💰 Acquisto effettuato per personaggio: " + currentCharacterIndex);
+                Debug.Log($"💰 Acquisto effettuato per personaggio: {currentCharacterIndex}");
 
-                // Controlliamo se il personaggio è stato davvero acquistato
-                if (characterManager.characters[currentCharacterIndex].isPurchased)
-                {
-                    Debug.Log("✅ Personaggio acquistato e aggiornato correttamente.");
-                    characterManager.SelectCharacter(currentCharacterIndex);
-                    PlayerPrefs.SetInt("SelectedCharacter", currentCharacterIndex);
-                    PlayerPrefs.Save();
-                }
-                else
-                {
-                    Debug.LogError("❌ ERRORE: Il personaggio non è stato aggiornato correttamente.");
-                }
+                character.isPurchased = true;
+                await SaveCharacterPurchase(currentCharacterIndex);
+                await FirebaseController.Instance.SaveCoins(currentCoins - character.cost);
 
-                UpdateTotalCoinsUI();
-                UpdateCharacterUI();
+                await characterManager.SelectCharacter(currentCharacterIndex);
+                await UpdateTotalCoinsUI();
+                await UpdateCharacterUI();
             }
             else
             {
@@ -122,13 +103,22 @@ public class ShopUIManager : MonoBehaviour
         }
     }
 
-
-
-
-    private void UpdateTotalCoinsUI()
+    private async Task UpdateTotalCoinsUI()
     {
-        // Aggiorna il testo delle monete totali
-        totalCoinsText.text = "" + CoinManager.GetTotalCoins().ToString();
+        int currentCoins = await GetTotalCoins();
+        totalCoinsText.text = currentCoins.ToString();
+    }
+
+    private async Task<int> GetTotalCoins()
+    {
+        TaskCompletionSource<int> tcs = new TaskCompletionSource<int>();
+
+        FirebaseController.Instance.LoadCoins((currentCoins) =>
+        {
+            tcs.SetResult(currentCoins);
+        });
+
+        return await tcs.Task;
     }
 
     public void OnBackButtonClicked()
@@ -148,8 +138,45 @@ public class ShopUIManager : MonoBehaviour
 
     IEnumerator HideWarningMessage()
     {
-        yield return new WaitForSeconds(2); // Il messaggio resta visibile per 2 secondi
+        yield return new WaitForSeconds(2);
         warningMessageText.gameObject.SetActive(false);
     }
 
+    private async Task SaveCharacterPurchase(int characterIndex)
+    {
+        if (FirebaseController.Instance.user != null)
+        {
+            string userId = FirebaseController.Instance.user.UserId;
+            await FirebaseController.Instance.dbReference
+                .Child("users").Child(userId).Child("purchasedCharacters")
+                .Child(characterIndex.ToString()).SetValueAsync(true);
+        }
+    }
+
+    private async Task<bool> IsCharacterPurchased(int characterIndex)
+    {
+        if (FirebaseController.Instance.user != null)
+        {
+            string userId = FirebaseController.Instance.user.UserId;
+            var task = await FirebaseController.Instance.dbReference
+                .Child("users").Child(userId).Child("purchasedCharacters")
+                .Child(characterIndex.ToString()).GetValueAsync();
+
+            return task.Exists && bool.Parse(task.Value.ToString());
+        }
+        return false;
+    }
+
+    private async Task<int> GetSelectedCharacterIndex()
+    {
+        if (FirebaseController.Instance.user != null)
+        {
+            string userId = FirebaseController.Instance.user.UserId;
+            var task = await FirebaseController.Instance.dbReference
+                .Child("users").Child(userId).Child("selectedCharacter").GetValueAsync();
+
+            return task.Exists ? int.Parse(task.Value.ToString()) : 0;
+        }
+        return 0;
+    }
 }

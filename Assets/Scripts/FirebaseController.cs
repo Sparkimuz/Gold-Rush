@@ -33,7 +33,7 @@ public class FirebaseController : MonoBehaviour
 
     public Firebase.Auth.FirebaseAuth auth;
     public Firebase.Auth.FirebaseUser user;
-    private DatabaseReference dbReference;
+    public DatabaseReference dbReference;
 
     bool isSignIn = false;
     bool isSigned = false;
@@ -205,12 +205,19 @@ public class FirebaseController : MonoBehaviour
     public void logOut()
     {
         auth.SignOut();
+        user = null; // Assicura che l'utente precedente venga rimosso
+        FirebaseController.Instance = null; // Resetta l'istanza per evitare dati errati
+
+        // Forza il caricamento del personaggio corretto dopo il logout
+        PlayerPrefs.DeleteKey("selectedCharacterIndex"); // Cancella i dati locali salvati
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Ricarica la scena per ripristinare lo stato iniziale
+
         profile_UserEmail_text.text = "";
         profile_UserName_text.text = "";
         settingsMenu.SetActive(false);
         openLoginPanel();
-
     }
+
 
 
 
@@ -314,14 +321,39 @@ public class FirebaseController : MonoBehaviour
     }
 
 
+
+
     void InitializeFirebase()
     {
+        Debug.Log("🟢 Inizializzando Firebase...");
+
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+
+        // URL manuale del database Firebase
+        string databaseUrl = "https://fir-goldrush-default-rtdb.europe-west1.firebasedatabase.app/";
+
+        FirebaseApp app = FirebaseApp.DefaultInstance;
+        dbReference = FirebaseDatabase.GetInstance(app, databaseUrl).RootReference;
+
+        if (dbReference != null)
+        {
+            Debug.Log("✅ Firebase Database inizializzato correttamente con URL: " + databaseUrl);
+        }
+        else
+        {
+            Debug.LogError("❌ Errore nell'inizializzazione del Database Firebase.");
+        }
+
         auth.StateChanged += AuthStateChanged;
         AuthStateChanged(this, null);
 
+        Debug.Log("🔥 Firebase completamente inizializzato!");
     }
+
+
+
+
+
 
     void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
@@ -419,8 +451,79 @@ public class FirebaseController : MonoBehaviour
 
 
 
- 
- 
+    public void LoadCoins(Action<int> callback)
+    {
+        if (dbReference == null)
+        {
+            Debug.LogError("❌ dbReference è NULL! Provo a reinizializzare Firebase...");
+            InitializeFirebase();
+            return;
+        }
+
+        if (user == null)
+        {
+            Debug.LogError("❌ Nessun utente autenticato! Assicurati di essere loggato prima di caricare le monete.");
+            return;
+        }
+
+        string userId = user.UserId;
+        dbReference.Child("users").Child(userId).Child("coins").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted && task.Result.Exists)
+            {
+                int coins = int.Parse(task.Result.Value.ToString());
+                Debug.Log("💰 Monete caricate da Firebase: " + coins);
+                callback?.Invoke(coins);
+            }
+            else
+            {
+                Debug.Log("⚠️ Nessun valore trovato, lascio inalterato.");
+                callback?.Invoke(0);
+            }
+        });
+    }
+
+
+
+    public async Task SaveCoins(int coinAmount)
+    {
+        if (user != null)
+        {
+            string userId = user.UserId;
+
+            try
+            {
+                // Controlla il valore attuale prima di aggiornare
+                DataSnapshot snapshot = await dbReference.Child("users").Child(userId).Child("coins").GetValueAsync();
+                if (snapshot.Exists)
+                {
+                    int currentCoins = int.Parse(snapshot.Value.ToString());
+                    if (currentCoins != coinAmount) // Solo se il valore è cambiato
+                    {
+                        await dbReference.Child("users").Child(userId).Child("coins").SetValueAsync(coinAmount);
+                        Debug.Log("✅ Monete aggiornate: " + coinAmount);
+                    }
+                    else
+                    {
+                        Debug.Log("🔹 Monete non cambiate, nessun aggiornamento.");
+                    }
+                }
+                else
+                {
+                    // Se il valore non esiste, lo inizializziamo
+                    await dbReference.Child("users").Child(userId).Child("coins").SetValueAsync(coinAmount);
+                    Debug.Log("✅ Monete inizializzate: " + coinAmount);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("❌ Errore nel salvataggio delle monete: " + e.Message);
+            }
+        }
+    }
+
+
+
 
     void Update()
     {
