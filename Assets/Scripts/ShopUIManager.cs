@@ -23,6 +23,14 @@ public class ShopUIManager : MonoBehaviour
         currentCharacterIndex = await GetSelectedCharacterIndex(); // Inizializza con il personaggio dell'utente
         await UpdateTotalCoinsUI();
         await UpdateCharacterUI();
+
+        if (!characterManager.characters[0].isPurchased)
+        {
+            await SaveCharacterPurchase(0);
+            await characterManager.SelectCharacter(0);
+            await UpdateCharacterUI();
+        }
+        
     }
 
 

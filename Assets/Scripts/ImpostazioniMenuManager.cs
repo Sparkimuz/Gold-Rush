@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Firebase.Auth;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -16,6 +17,19 @@ public class ImpostazioniMenuManager : MonoBehaviour
 
     void Start()
     {
+
+
+        // Assicurati che il FirebaseController esista
+        /*if (FirebaseController.Instance == null)
+        {
+            SceneManager.LoadScene(2);
+            return;
+        }*/
+        
+
+
+
+
 
         FirebaseController.OnUserUpdated += UpdateProfileUI;
 
@@ -72,17 +86,7 @@ public class ImpostazioniMenuManager : MonoBehaviour
 
     public void logOut()
     {
-        Firebase.Auth.FirebaseAuth auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        auth.SignOut();
-
-        Debug.Log("🔄 Logout completato, resetto FirebaseController.");
-        profileStatisticLogoutPanel?.SetActive(false);
-        mainMenuPanel.SetActive(false);
-
-        DestroyFirebaseController();
-
-        // Torna alla scena di login
-        SceneManager.LoadScene(2);
+        FirebaseController.Instance.logOut();
     }
 
 
@@ -93,7 +97,7 @@ public class ImpostazioniMenuManager : MonoBehaviour
     }
 
 
-    void DestroyFirebaseController()
+    /*void DestroyFirebaseController()
     {
         if (FirebaseController.Instance != null)
         {
@@ -105,11 +109,26 @@ public class ImpostazioniMenuManager : MonoBehaviour
         {
             Debug.Log("⚠️ FirebaseController non trovato, impossibile distruggere.");
         }
+    }*/
+
+
+    private void Update()
+    {
+        if (FirebaseController.Instance == null)
+        {
+            Debug.LogWarning("⚠️ FirebaseController non trovato, provo a ricaricarlo...");
+            SceneManager.LoadScene(2);
+        }
     }
+
 
 
     void UpdateProfileUI()
     {
+
+        if (FirebaseController.Instance == null)
+            return;
+
         Firebase.Auth.FirebaseUser user = FirebaseController.Instance.user;
 
         if (user != null)
@@ -120,9 +139,10 @@ public class ImpostazioniMenuManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("❌ ERRORE: Utente nullo in FirebaseController!");
-            profile_UserName_text.text = "ERRORE";
-            profile_UserEmail_text.text = "ERRORE";
+            Debug.Log("❌ ERRORE: Utente nullo in FirebaseController!");
+            //profile_UserName_text.text = "ERRORE";
+            //profile_UserEmail_text.text = "ERRORE";
+            SceneManager.LoadScene(2);
         }
     }
 

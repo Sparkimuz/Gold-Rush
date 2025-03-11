@@ -12,6 +12,8 @@ public class CharacterManager : MonoBehaviour
         public GameObject gamePrefab;  // Modello/animator per il gioco (FastRun, Jump, ecc.)
         public int cost;
         public bool isPurchased;
+        public static CharacterManager Instance;
+
     }
 
     void Awake()
@@ -34,9 +36,18 @@ public class CharacterManager : MonoBehaviour
             return;
         }
 
+        if (index == 0)
+        {
+            characters[index].isPurchased = true;
+            PlayerPrefs.SetInt("CharacterPurchased_" + index, 1);
+            PlayerPrefs.Save();
+            return;
+        }
+
         // Attende il valore delle monete da Firebase
         FirebaseController.Instance.LoadCoins(async (currentCoins) =>
         {
+        
             if (characters[index].cost <= currentCoins)
             {
                 Debug.Log("✅ Personaggio " + index + " acquistato con successo!");

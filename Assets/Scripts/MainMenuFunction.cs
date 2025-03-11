@@ -11,6 +11,12 @@ public class MainMenuFunction : MonoBehaviour
     void Start()
     {
 
+        /*if (FirebaseController.Instance == null)
+        {
+            SceneManager.LoadScene(2);
+            return;
+        }
+
         // Assicurati che il FirebaseController esista
         if (FirebaseController.Instance == null)
         {
@@ -20,7 +26,10 @@ public class MainMenuFunction : MonoBehaviour
                 firebaseObj = new GameObject("FirebaseController");
                 firebaseObj.AddComponent<FirebaseController>();
             }
-        }
+        }*/
+
+       
+
 
 
 
@@ -39,6 +48,11 @@ public class MainMenuFunction : MonoBehaviour
     void Update()
     {
         // Eventuali aggiornamenti o logiche aggiuntive
+        if (FirebaseController.Instance == null)
+        {
+            SceneManager.LoadScene(2);
+            return;
+        }
     }
 
     public void PlayGame()

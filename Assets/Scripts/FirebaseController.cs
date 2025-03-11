@@ -45,20 +45,24 @@ public class FirebaseController : MonoBehaviour
             var dependencyStatus = task.Result;
             if (dependencyStatus == Firebase.DependencyStatus.Available)
             {
-                // Create and hold a reference to your FirebaseApp,
-                // where app is a Firebase.FirebaseApp property of your application class.
                 InitializeFirebase();
 
-                // Set a flag here to indicate whether Firebase is ready to use by your app.
+                // 🔥 Se siamo nella scena di autenticazione, riattiviamo la UI
+                if (SceneManager.GetActiveScene().buildIndex == 2)
+                {
+                    Debug.Log("🎯 Siamo nella scena di autenticazione, mostro il login.");
+                    openLoginPanel();
+                }
             }
             else
             {
-                UnityEngine.Debug.LogError(System.String.Format(
-                  "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
-                // Firebase Unity SDK is not safe to use here.
+                Debug.LogError($"Could not resolve Firebase dependencies: {dependencyStatus}");
             }
         });
     }
+
+
+
 
     private void Awake()
     {
@@ -70,10 +74,14 @@ public class FirebaseController : MonoBehaviour
         }
         else
         {
-            Debug.Log("FirebaseController già esistente, distruggo il duplicato.");
-            Destroy(gameObject);
+            if (SceneManager.GetActiveScene().buildIndex != 2) // NON distruggere in LoginScene
+            {
+                Debug.Log("FirebaseController già esistente, distruggo il duplicato.");
+                Destroy(gameObject);
+            }
         }
     }
+
 
 
     public void openForgetPasswordPanel()
@@ -204,19 +212,27 @@ public class FirebaseController : MonoBehaviour
 
     public void logOut()
     {
-        auth.SignOut();
-        user = null; // Assicura che l'utente precedente venga rimosso
-        FirebaseController.Instance = null; // Resetta l'istanza per evitare dati errati
+        if (auth != null)
+        {
+            auth.SignOut();
+            Debug.Log("✅ Utente disconnesso correttamente.");
+        }
 
-        // Forza il caricamento del personaggio corretto dopo il logout
+        user = null; // Resetta l'utente
         PlayerPrefs.DeleteKey("selectedCharacterIndex"); // Cancella i dati locali salvati
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Ricarica la scena per ripristinare lo stato iniziale
 
-        profile_UserEmail_text.text = "";
-        profile_UserName_text.text = "";
-        settingsMenu.SetActive(false);
-        openLoginPanel();
+        // 🔥 Disattiva tutti i pannelli prima di caricare la scena di login
+        if (loginPanel) loginPanel.SetActive(false);
+        if (profilePanel) profilePanel.SetActive(false);
+        if (signupPanel) signupPanel.SetActive(false);
+        if (forgetPasswordPanel) forgetPasswordPanel.SetActive(false);
+        if (notificationPanel) notificationPanel.SetActive(false);
+
+        // 🔄 Ricarica Firebase nella scena di autenticazione
+        SceneManager.LoadScene(2);
     }
+
+
 
 
 
