@@ -1151,7 +1151,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7431f26027ca71642b43fdd51015131b, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 7d0f5f357df8c6b49a0318d2f427c561, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.05
   m_Pitch: 1
@@ -1321,6 +1321,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 12273174}
         m_TargetAssemblyTypeName: LanguageSelector, Assembly-CSharp
         m_MethodName: ChangeLanguage
@@ -2437,7 +2449,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 299992662}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &299992662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2903,7 +2927,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 375851186}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1908230880}
+        m_TargetAssemblyTypeName: MainMenuFunction, Assembly-CSharp
+        m_MethodName: QuitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &375851186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3557,6 +3605,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1405087093}
         m_TargetAssemblyTypeName: ShopUIManager, Assembly-CSharp
         m_MethodName: NextCharacter
@@ -4863,6 +4923,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1405087093}
         m_TargetAssemblyTypeName: ShopUIManager, Assembly-CSharp
         m_MethodName: OnBackButtonClicked
@@ -5165,6 +5237,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1488203151}
         m_TargetAssemblyTypeName: ImpostazioniMenuManager, Assembly-CSharp
         m_MethodName: CloseProfile
@@ -5748,6 +5832,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1908230880}
         m_TargetAssemblyTypeName: MainMenuFunction, Assembly-CSharp
         m_MethodName: PlayGame
@@ -6166,6 +6262,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 12273174}
         m_TargetAssemblyTypeName: LanguageSelector, Assembly-CSharp
         m_MethodName: ChangeLanguage
@@ -6588,6 +6696,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1488203151}
         m_TargetAssemblyTypeName: ImpostazioniMenuManager, Assembly-CSharp
         m_MethodName: OpenSettings
@@ -8560,6 +8680,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 12273174}
         m_TargetAssemblyTypeName: LanguageSelector, Assembly-CSharp
         m_MethodName: ChangeLanguage
@@ -8769,6 +8901,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1488203151}
         m_TargetAssemblyTypeName: ImpostazioniMenuManager, Assembly-CSharp
         m_MethodName: logOut
@@ -10129,6 +10273,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1908230880}
         m_TargetAssemblyTypeName: MainMenuFunction, Assembly-CSharp
         m_MethodName: PlayGame
@@ -12276,6 +12432,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1488203151}
         m_TargetAssemblyTypeName: ImpostazioniMenuManager, Assembly-CSharp
         m_MethodName: CloseSettings
@@ -12383,37 +12551,37 @@ MonoBehaviour:
   - characterName: Remy
     shopPrefab: {fileID: 2047121960}
     gamePrefab: {fileID: 6004442419953021549, guid: 2df0c58fe7a413d45b7eca30486ad1c0, type: 3}
-    cost: 100
+    cost: 1
     isPurchased: 0
   - characterName: Leonard
     shopPrefab: {fileID: 463585793}
     gamePrefab: {fileID: 5426677267163279753, guid: 00624d82dd6e771449fc300be7560e97, type: 3}
-    cost: 200
+    cost: 2
     isPurchased: 0
   - characterName: Arciera
     shopPrefab: {fileID: 1856962741}
     gamePrefab: {fileID: 6553442075311168273, guid: 13cdf863d2c3f974994b139da3a16115, type: 3}
-    cost: 250
+    cost: 2
     isPurchased: 0
   - characterName: Paladino
     shopPrefab: {fileID: 227705168}
     gamePrefab: {fileID: 1683511227258302326, guid: 18c453184b28a7845a6f826b2b8313cc, type: 3}
-    cost: 300
+    cost: 3
     isPurchased: 0
   - characterName: Manichino
     shopPrefab: {fileID: 885503462}
     gamePrefab: {fileID: 2697808887356287341, guid: 64b36d965cb233444af6a16522413d15, type: 3}
-    cost: 200
+    cost: 2
     isPurchased: 0
   - characterName: Pilota
     shopPrefab: {fileID: 1922239510}
     gamePrefab: {fileID: 8088997774031196190, guid: 0a1267d28958c804f9ca7dca98e9d23e, type: 3}
-    cost: 250
+    cost: 2
     isPurchased: 0
   - characterName: Calciatore
     shopPrefab: {fileID: 1113758821}
     gamePrefab: {fileID: 6234905637416843696, guid: c3bd30d06d4e1d843bb078127ace04ce, type: 3}
-    cost: 400
+    cost: 4
     isPurchased: 0
 --- !u!1 &1612173025
 GameObject:
@@ -13628,7 +13796,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1718742620}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1718742620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14016,6 +14196,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1908230880}
         m_TargetAssemblyTypeName: MainMenuFunction, Assembly-CSharp
         m_MethodName: OpenShop
@@ -15029,6 +15221,7 @@ MonoBehaviour:
   - {fileID: 77069809}
   bgmSlider: {fileID: 1901033386}
   sfxSlider: {fileID: 126181187}
+  buttonClickClip: {fileID: 8300000, guid: 7d0f5f357df8c6b49a0318d2f427c561, type: 3}
 --- !u!1 &1908230879
 GameObject:
   m_ObjectHideFlags: 0
@@ -15411,6 +15604,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1405087093}
         m_TargetAssemblyTypeName: ShopUIManager, Assembly-CSharp
         m_MethodName: PreviousCharacter
@@ -15545,6 +15750,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1405087093}
         m_TargetAssemblyTypeName: ShopUIManager, Assembly-CSharp
         m_MethodName: OnPurchaseButtonClicked
@@ -16077,6 +16294,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1905289501}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1488203151}
         m_TargetAssemblyTypeName: ImpostazioniMenuManager, Assembly-CSharp
         m_MethodName: OpenProfile
@@ -16285,7 +16514,7 @@ GameObject:
   - component: {fileID: 2023857646}
   - component: {fileID: 2023857647}
   m_Layer: 0
-  m_Name: BGM
+  m_Name: MENU
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16316,7 +16545,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: d1eb9060dd79aac4d80855ece415e143, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 336f197a998013f48b73fd6f83ed48a2, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.05
   m_Pitch: 1

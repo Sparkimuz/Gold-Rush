@@ -11,6 +11,9 @@ public class AudioManager : MonoBehaviour
     public Slider bgmSlider;  // Slider per controllare il volume della musica
     public Slider sfxSlider;  // Slider per controllare il volume degli effetti sonori
 
+    [Header("SFX Clips")]
+    public AudioClip buttonClickClip;  // ← Dragga qui la clip del click
+
     void Start()
     {
         // Impostiamo i valori iniziali degli slider
@@ -48,5 +51,19 @@ public class AudioManager : MonoBehaviour
         {
             sfx.volume = volume;
         }
+    }
+
+    // ----------------------------------------------------------
+    // 1) Metodo per riprodurre il suono di "click" di un pulsante
+    // ----------------------------------------------------------
+    public void PlayButtonClick()
+    {
+        if (buttonClickClip == null)
+        {
+            Debug.LogWarning("AudioManager: nessun buttonClickClip assegnato!");
+            return;
+        }
+        // Esempio: uso il primo sfxSources[0], ma puoi scegliere o randomizzare
+        sfxSources[0].PlayOneShot(buttonClickClip);
     }
 }
