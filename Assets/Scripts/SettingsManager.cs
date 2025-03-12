@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SettingsManager : MonoBehaviour
@@ -8,7 +9,7 @@ public class SettingsManager : MonoBehaviour
     // Metodo di inizializzazione
     void Start()
     {
-
+        
         // Assicurati che il FirebaseController esista
         if (FirebaseController.Instance == null)
         {
@@ -75,4 +76,5 @@ public class SettingsManager : MonoBehaviour
         // Chiude il pannello delle impostazioni e riprende il gioco
         CloseSettings();
     }
+
 }

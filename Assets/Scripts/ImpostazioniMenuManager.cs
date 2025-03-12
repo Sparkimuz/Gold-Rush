@@ -1,6 +1,7 @@
 ﻿using Firebase.Auth;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,7 +14,7 @@ public class ImpostazioniMenuManager : MonoBehaviour
     public GameObject settingsPanel;
     public GameObject profileStatisticLogoutPanel;
     public GameObject authPanel;
-    public TMP_Text profile_UserName_text, profile_UserEmail_text;
+    public TMP_Text profile_UserName_text, profile_UserEmail_text, profile_distanceRecord_text;
 
     void Start()
     {
@@ -123,9 +124,8 @@ public class ImpostazioniMenuManager : MonoBehaviour
 
 
 
-    void UpdateProfileUI()
+    async void UpdateProfileUI()
     {
-
         if (FirebaseController.Instance == null)
             return;
 
@@ -136,14 +136,31 @@ public class ImpostazioniMenuManager : MonoBehaviour
             Debug.Log("🔄 Aggiorno UI con Nome: " + user.DisplayName + " | Email: " + user.Email);
             profile_UserName_text.text = string.IsNullOrEmpty(user.DisplayName) ? "Nessun Nome" : user.DisplayName;
             profile_UserEmail_text.text = string.IsNullOrEmpty(user.Email) ? "Nessuna Email" : user.Email;
+
+            // ⚠️ ATTENDI il valore prima di assegnarlo
+            int distanceRecord = await GetDisRecord();
+            profile_distanceRecord_text.text = distanceRecord.ToString() + " m";  // Aggiunto " m" per chiarezza
         }
         else
         {
             Debug.Log("❌ ERRORE: Utente nullo in FirebaseController!");
-            //profile_UserName_text.text = "ERRORE";
-            //profile_UserEmail_text.text = "ERRORE";
             SceneManager.LoadScene(2);
         }
+    }
+
+
+
+
+    private async Task<int> GetDisRecord()
+    {
+        TaskCompletionSource<int> tcs = new TaskCompletionSource<int>();
+
+        FirebaseController.Instance.LoadDisRecord((distanceRecord) =>
+        {
+            tcs.SetResult(distanceRecord);
+        });
+
+        return await tcs.Task;
     }
 
 

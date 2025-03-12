@@ -557,6 +557,75 @@ public class FirebaseController : MonoBehaviour
 
 
 
+    public void LoadDisRecord(Action<int> callback)
+    {
+        if (dbReference == null)
+        {
+            Debug.LogError("❌ dbReference è NULL! Provo a reinizializzare Firebase...");
+            InitializeFirebase();
+            return;
+        }
+
+        if (user == null)
+        {
+            Debug.LogError("❌ Nessun utente autenticato! Assicurati di essere loggato prima di caricare la distanza.");
+            return;
+        }
+
+        string userId = user.UserId;
+        dbReference.Child("users").Child(userId).Child("distanceRecord").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted && task.Result.Exists)
+            {
+                int distanceRecord = int.Parse(task.Result.Value.ToString());
+                Debug.Log("Distanza caricata da Firebase: " + distanceRecord);
+                callback?.Invoke(distanceRecord);
+            }
+            else
+            {
+                Debug.Log("⚠️ Nessun valore trovato, lascio inalterato.");
+                callback?.Invoke(0);
+            }
+        });
+    }
+
+
+    public async Task SaveDisRecord(int endDistance)
+    {
+        if (user != null)
+        {
+            string userId = user.UserId;
+
+            try
+            {
+                // Controlla il valore attuale prima di aggiornare
+                DataSnapshot snapshot = await dbReference.Child("users").Child(userId).Child("distanceRecord").GetValueAsync();
+                if (snapshot.Exists)
+                {
+                    int distanceRecord = int.Parse(snapshot.Value.ToString());
+                    if (distanceRecord < endDistance) // Solo se il valore è cambiato
+                    {
+                        await dbReference.Child("users").Child(userId).Child("distanceRecord").SetValueAsync(endDistance);
+                        Debug.Log("✅ distanza aggiornata: " + endDistance);
+                    }
+     
+                }
+                else
+                {
+                    // Se il valore non esiste, lo inizializziamo
+                    await dbReference.Child("users").Child(userId).Child("distanceRecord").SetValueAsync(endDistance);
+                    Debug.Log("✅ distanza inizializzata: " + endDistance);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("❌ Errore nel salvataggio della distanza: " + e.Message);
+            }
+        }
+    }
+
+
+
 
     void Update()
     {

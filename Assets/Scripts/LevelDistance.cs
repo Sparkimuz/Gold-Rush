@@ -29,6 +29,11 @@ public class LevelDistance : MonoBehaviour
 
     void Start()
     {
+        if (disDisplayEnd == null)
+        {
+            Debug.LogError("❌ disDisplayEnd non è assegnato! Assicurati di collegarlo nell'Inspector.");
+        }
+
         // Carica la distanza salvata
         LoadDistance();
 
