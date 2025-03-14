@@ -85,6 +85,7 @@ public class ImpostazioniMenuManager : MonoBehaviour
     }
 
 
+
     public void logOut()
     {
         FirebaseController.Instance.logOut();

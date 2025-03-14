@@ -90,6 +90,10 @@ MonoBehaviour:
     m_Localized: INDIETRO
     m_Metadata:
       m_Items: []
+  - m_Id: 55601706363387904
+    m_Localized: SVILUPPATO DA LORENZO ALICANDRO E TOMMASO CENCIOTTI
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

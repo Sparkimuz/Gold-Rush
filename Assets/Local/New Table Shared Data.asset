@@ -87,6 +87,10 @@ MonoBehaviour:
     m_Key: INDIETRO
     m_Metadata:
       m_Items: []
+  - m_Id: 55601706363387904
+    m_Key: credits
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

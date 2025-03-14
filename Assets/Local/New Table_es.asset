@@ -90,6 +90,10 @@ MonoBehaviour:
     m_Localized: "ATR\xC1S"
     m_Metadata:
       m_Items: []
+  - m_Id: 55601706363387904
+    m_Localized: DESARROLLADO POR TOMMASO CENCIOTTI Y LORENZO ALICANDRO
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuFunction : MonoBehaviour
 {
-    public GameObject shopPanel, settingsMenu; // Riferimento al pannello dello shop
+    public GameObject shopPanel, settingsMenu, creditPanel; // Riferimento al pannello dello shop
     
 
     void Start()
@@ -111,6 +111,19 @@ public class MainMenuFunction : MonoBehaviour
         {
             shopPanel.SetActive(false);
         }
+    }
+
+
+    public void OpenCredits()
+    {
+        if(creditPanel != null)
+            creditPanel.SetActive(true);
+    }
+
+    public void CloseCredits()
+    {
+        if(creditPanel != null)
+            creditPanel.SetActive(false);
     }
 
     public void QuitGame()
