@@ -4,7 +4,6 @@ using UnityEngine;
 public class SettingsManager : MonoBehaviour
 {
     public GameObject settingsPanel;  // Il pannello delle impostazioni
-    private bool isSettingsOpen = false; // Controlla se la schermata delle impostazioni è aperta
 
     // Metodo di inizializzazione
     void Start()
@@ -29,33 +28,17 @@ public class SettingsManager : MonoBehaviour
         }
     }
 
-    // Metodo per aprire/chiudere le impostazioni
-    public void ToggleSettings()
-    {
-        if (isSettingsOpen)
-        {
-            // Se le impostazioni sono aperte, chiudi le impostazioni e riprendi il gioco
-            CloseSettings();
-        }
-        else
-        {
-            // Se le impostazioni sono chiuse, aprile
-            OpenSettings();
-        }
-    }
-
     public void OpenSettings()
     {
         settingsPanel.SetActive(true);   // Mostra il pannello delle impostazioni
-        isSettingsOpen = true;
         PauseGame(); // Mette in pausa il gioco
     }
 
     public void CloseSettings()
     {
-        settingsPanel.SetActive(false);   // Nascondi il pannello delle impostazioni
-        isSettingsOpen = false;
         ResumeGame(); // Riprende il gioco
+        settingsPanel.SetActive(false);   // Nascondi il pannello delle impostazioni
+        
     }
 
     // Metodo per mettere in pausa il gioco
