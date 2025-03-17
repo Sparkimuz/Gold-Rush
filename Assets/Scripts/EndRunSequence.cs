@@ -127,6 +127,13 @@ public class EndRunSequence : MonoBehaviour
 
     IEnumerator EndSequence()
     {
+
+        AudioManager audioMgr = FindObjectOfType<AudioManager>();
+        if (audioMgr != null)
+        {
+            audioMgr.StopBackgroundMusic();
+            audioMgr.PlayGameOverSFX();
+        }
         // Aggiungi le monete raccolte durante la run al totale
         if (MasterInfo.coinCount > 0)
         {

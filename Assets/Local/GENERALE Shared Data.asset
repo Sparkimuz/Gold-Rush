@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: GENERALE Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: GENERALE
+  m_TableCollectionNameGuidString: 8f1917f3058d38a4b95773b64fc7b661
+  m_Entries:
+  - m_Id: 2489212440576
+    m_Key: VIA!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2718137552896
+    m_Key: GIOCA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4130145800192
+    m_Key: NEGOZIO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4485885693952
+    m_Key: ESCI DAL GIOCO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9550323224576
+    m_Key: CONTINUA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12344719544320
+    m_Key: RIAVVIA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12433806561280
+    m_Key: MENU
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40919766110208
+    m_Key: IMPOSTAZIONI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5085796943134720
+    m_Key: PROFILO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5093497144213504
+    m_Key: TORNA AL MENU
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5093669647548416
+    m_Key: OBIETTIVI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48208825034080256
+    m_Key: CREA NUOVO ACCOUNT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48210226506235904
+    m_Key: ACCEDI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48210364276539392
+    m_Key: PASSWORD DIMENTICATA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48210691562274816
+    m_Key: INSERISCI NOME UTENTE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48211250344230912
+    m_Key: INSERISCI PASSWORD
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48216187094564864
+    m_Key: REGISTRATI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48216651714396160
+    m_Key: INDIETRO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 55601706363387904
+    m_Key: SVILUPPATO DA LORENZO ALICANDRO E TOMMASO CENCIOTTI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 56849854050205696
+    m_Key: CREDITI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 56852633724518400
+    m_Key: 'COSTO:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 56859526656294912
+    m_Key: MONETE INSUFFICIENTI!
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 5179873211111440408
+  references:
+    version: 2
+    RefIds:
+    - rid: 5179873211111440408
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1728667949502

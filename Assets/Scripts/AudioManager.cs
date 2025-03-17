@@ -13,6 +13,7 @@ public class AudioManager : MonoBehaviour
 
     [Header("SFX Clips")]
     public AudioClip buttonClickClip;  // ← Dragga qui la clip del click
+    public AudioClip gameOverClip;  // ← Dragga qui la clip di game over
 
     void Start()
     {
@@ -66,4 +67,26 @@ public class AudioManager : MonoBehaviour
         // Esempio: uso il primo sfxSources[0], ma puoi scegliere o randomizzare
         sfxSources[0].PlayOneShot(buttonClickClip);
     }
+
+    public void StopBackgroundMusic()
+    {
+        if (bgmSource != null)
+        {
+            bgmSource.Stop();
+        }
+    }
+
+    public void PlayGameOverSFX()
+    {
+        if (gameOverClip == null)
+        {
+            Debug.LogWarning("AudioManager: GameOverClip non assegnato!");
+            return;
+        }
+        // Per comodità, lo facciamo riprodurre dal quarto sfxSource, 
+        // ma puoi sceglierne un altro o un array in base alle tue necessità
+        sfxSources[4].PlayOneShot(gameOverClip);
+    }
 }
+
+
