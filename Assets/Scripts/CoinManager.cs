@@ -35,6 +35,8 @@ public class CoinManager : MonoBehaviour
             int newTotal = currentCoins + amount;
             FirebaseController.Instance.SaveCoins(newTotal);
             Debug.Log("💰 Monete aggiunte! Nuovo totale: " + newTotal);
+
+            FirebaseController.Instance.AddToAllTimeCoins(amount);
         });
     }
 

@@ -115,6 +115,8 @@ public class EndRunSequence : MonoBehaviour
 
             recordText.SetActive(true);
         }
+
+        yield return FirebaseController.Instance.AddToTotalDistance(endDis);
     }
 
 

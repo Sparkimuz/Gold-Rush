@@ -640,4 +640,100 @@ public class FirebaseController : MonoBehaviour
             }
         }
     }
+
+        public void LoadDistanceTotal(Action<int> callback)
+    {
+        if (dbReference == null || user == null)
+        {
+            Debug.LogError("❌ dbReference o user null, impossibile caricare distanceTotal.");
+            callback?.Invoke(0);
+            return;
+        }
+
+        string userId = user.UserId;
+        dbReference.Child("users").Child(userId).Child("distanceTotal").GetValueAsync()
+            .ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCompleted && task.Result.Exists)
+                {
+                    int distTotal = int.Parse(task.Result.Value.ToString());
+                    callback?.Invoke(distTotal);
+                }
+                else
+                {
+                    // Se non esiste, consideriamo 0
+                    callback?.Invoke(0);
+                }
+            });
+    }
+
+    public async Task AddToTotalDistance(int distanceToAdd)
+    {
+        if (user == null || dbReference == null)
+        {
+            Debug.LogError("❌ user o dbReference null, impossibile aggiungere distanza!");
+            return;
+        }
+
+        string userId = user.UserId;
+        // Leggi il valore attuale
+        DataSnapshot snapshot = await dbReference.Child("users").Child(userId).Child("distanceTotal").GetValueAsync();
+        int currentTotal = 0;
+        if (snapshot.Exists)
+        {
+            currentTotal = int.Parse(snapshot.Value.ToString());
+        }
+
+        int newTotal = currentTotal + distanceToAdd;
+        await dbReference.Child("users").Child(userId).Child("distanceTotal").SetValueAsync(newTotal);
+        Debug.Log($"✅ distanceTotal aggiornata: da {currentTotal} a {newTotal}");
+    }
+
+    public void LoadCoinsAllTime(Action<int> callback)
+    {
+        if (dbReference == null || user == null)
+        {
+            Debug.LogError("❌ dbReference o user null, impossibile caricare coinsAllTime.");
+            callback?.Invoke(0);
+            return;
+        }
+
+        string userId = user.UserId;
+        dbReference.Child("users").Child(userId).Child("coinsAllTime").GetValueAsync()
+            .ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCompleted && task.Result.Exists)
+                {
+                    int c = int.Parse(task.Result.Value.ToString());
+                    callback?.Invoke(c);
+                }
+                else
+                {
+                    callback?.Invoke(0);
+                }
+            });
+    }
+
+    public async Task AddToAllTimeCoins(int coinsToAdd)
+    {
+        if (user == null || dbReference == null)
+        {
+            Debug.LogError("❌ user o dbReference null, impossibile aggiungere monete storiche!");
+            return;
+        }
+
+        string userId = user.UserId;
+        // Leggi il valore attuale
+        DataSnapshot snapshot = await dbReference.Child("users").Child(userId).Child("coinsAllTime").GetValueAsync();
+        int currentAllTime = 0;
+        if (snapshot.Exists)
+        {
+            currentAllTime = int.Parse(snapshot.Value.ToString());
+        }
+
+        int newTotal = currentAllTime + coinsToAdd;
+        await dbReference.Child("users").Child(userId).Child("coinsAllTime").SetValueAsync(newTotal);
+        Debug.Log($"✅ coinsAllTime aggiornata: da {currentAllTime} a {newTotal}");
+    }
+
 }

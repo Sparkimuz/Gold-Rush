@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuFunction : MonoBehaviour
 {
-    public GameObject shopPanel, settingsMenu, creditPanel; // Riferimento al pannello dello shop
+    public GameObject shopPanel, settingsMenu, creditPanel, achievementsPanel; // Riferimento al pannello dello shop
     
 
     void Start()
@@ -133,5 +133,16 @@ public class MainMenuFunction : MonoBehaviour
     #else
         Application.Quit();
     #endif
+    }
+    public void OpenAchievements()
+    {
+        if(achievementsPanel != null)
+            achievementsPanel.SetActive(true);
+    }
+
+    public void CloseAchievements()
+    {
+        if(achievementsPanel != null)
+            achievementsPanel.SetActive(false);
     }
 }

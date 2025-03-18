@@ -106,6 +106,26 @@ MonoBehaviour:
     m_Localized: "\xA1MONEDAS INSUFICIENTES!"
     m_Metadata:
       m_Items: []
+  - m_Id: 56965618983895040
+    m_Localized: 'NOMBRE:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 56966112812859392
+    m_Localized: 'DISTANCIA RECORD:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 56968421743656960
+    m_Localized: NUEVO RECORD!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57150081063845888
+    m_Localized: 'DISTANCIA RECORRIDA:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57150535718010880
+    m_Localized: 'MONEDAS COLECCIONADAS:'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

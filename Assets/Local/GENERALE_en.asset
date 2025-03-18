@@ -106,6 +106,26 @@ MonoBehaviour:
     m_Localized: NOT ENOUGH COINS!
     m_Metadata:
       m_Items: []
+  - m_Id: 56965618983895040
+    m_Localized: 'NAME:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 56966112812859392
+    m_Localized: 'DISTANCE RECORD:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 56968421743656960
+    m_Localized: NEW RECORD!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57150081063845888
+    m_Localized: 'DISTANCE RAN:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57150535718010880
+    m_Localized: 'COINS COLLECTED:'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

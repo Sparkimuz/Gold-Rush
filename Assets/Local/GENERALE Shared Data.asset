@@ -103,6 +103,26 @@ MonoBehaviour:
     m_Key: MONETE INSUFFICIENTI!
     m_Metadata:
       m_Items: []
+  - m_Id: 56965618983895040
+    m_Key: 'NOME:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 56966112812859392
+    m_Key: 'DISTANZA RECORD:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 56968421743656960
+    m_Key: NUOVO RECORD!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57150081063845888
+    m_Key: 'DISTANZA PERCORSA:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57150535718010880
+    m_Key: 'MONETE COLLEZIONATE:'
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
