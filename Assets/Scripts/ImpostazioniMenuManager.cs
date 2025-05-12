@@ -14,7 +14,7 @@ public class ImpostazioniMenuManager : MonoBehaviour
     public GameObject settingsPanel;
     public GameObject profileStatisticLogoutPanel;
     public GameObject authPanel;
-    public TMP_Text profile_UserName_text, profile_UserEmail_text, profile_distanceRecord_text;
+    public TMP_Text profile_UserName_text, profile_UserEmail_text, profile_distanceRecord_text, profile_moneyAllTime_text;
 
     void Start()
     {
@@ -141,6 +141,8 @@ public class ImpostazioniMenuManager : MonoBehaviour
             // ⚠️ ATTENDI il valore prima di assegnarlo
             int distanceRecord = await GetDisRecord();
             profile_distanceRecord_text.text = distanceRecord.ToString() + " m";  // Aggiunto " m" per chiarezza
+            int moneyAllTime = await GetMoneyRecord();
+            profile_moneyAllTime_text.text = moneyAllTime.ToString();
         }
         else
         {
@@ -159,6 +161,18 @@ public class ImpostazioniMenuManager : MonoBehaviour
         FirebaseController.Instance.LoadDisRecord((distanceRecord) =>
         {
             tcs.SetResult(distanceRecord);
+        });
+
+        return await tcs.Task;
+    }
+
+    private async Task<int> GetMoneyRecord()
+    {
+        TaskCompletionSource<int> tcs = new TaskCompletionSource<int>();
+
+        FirebaseController.Instance.LoadCoinsAllTime((moneyAllTime) =>
+        {
+            tcs.SetResult(moneyAllTime);
         });
 
         return await tcs.Task;
